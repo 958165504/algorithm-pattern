@@ -797,3 +797,27 @@ Backpack & Coin Change (10%)
 - [ ] [coin-change](https://leetcode-cn.com/problems/coin-change/)
 - [ ] [backpack](https://www.lintcode.com/problem/backpack/description)
 - [ ] [backpack-ii](https://www.lintcode.com/problem/backpack-ii/description)
+
+
+## 自我总结
+1.思维框架：
+		`明确 base case -> 明确「状态」-> 明确「选择」 -> 定义 dp 数组/函数的含义。`
+	
+	# 初始化 base case
+	dp[0][0][...] = base
+	# 进行状态转移
+	for 状态1 in 状态1的所有取值：
+   	 	for 状态2 in 状态2的所有取值：
+      	  for ...
+          	  dp[状态1][状态2][...] = 求最值(选择1，选择2...)
+	
+2.
+动态规划是穷举所有例子，递归、备忘录（从上往下）、dpTable(从下往上)
+我对做走方格题可以，做序列题感觉吃力，不知道在怎么找状态转移方程
+	
+
+
+
+
+
+

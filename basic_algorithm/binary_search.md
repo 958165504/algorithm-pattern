@@ -1,9 +1,75 @@
 # 二分搜索
 自我总结：二分搜索就是想方设法分成两个区间，然后进行选择收缩
+## 我的疑问
+//行：我之前的疑惑，当二分搜索时，并没有找到就返回，而是全部搜索完，闭区间【right,left】退出循环，到底返回哪一边索引？
+总结出看当num[mid]等于中间值时，是哪一个边界在移动，那么返回的索引就为另一个不动的边界，因为跳出最后一个元素区间时，肯定时移动的那个元素再跳，为移动的那条边界为我们找的索引
+### [154. 寻找旋转排序数组中的最小值 II](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+
+```java
+int binary_search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1; 
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1; 
+        } else if(nums[mid] == target) {
+            // 直接返回
+            return mid;
+        }
+    }
+    // 直接返回
+    return -1;
+}
+
+int left_bound(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+            // 别返回，锁定左侧边界
+            right = mid - 1;
+        }
+    }
+    // 最后要检查 left 越界的情况
+    if (left >= nums.length || nums[left] != target)
+        return -1;
+    return left;//行：为什么【right,;eft】时，返回left元素？而不是right，选择哪一边呢？ 因为nums[mid] == target时是right = mid - 1右边界再动，而
+                //nums[mid] < target时 left = mid + 1;所以当Num[left]第一次等于num[mid]时就不再动了，而最终是right = mid - 1;跳出的【left,left】的边界，
+                //所以最左边的target是存在于left索引的。下面的最右边的target道理一样
+}
+
+int right_bound(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+            // 别返回，锁定右侧边界
+            left = mid + 1;
+        }
+    }
+    // 最后要检查 right 越界的情况
+    if (right < 0 || nums[right] != target)
+        return -1;
+    return right;
+}
+```
+
+
+
+
 ## 二分搜索模板
 
 给一个**有序数组**和目标值，找第一次/最后一次/任何一次出现的索引，如果没有出现返回-1
-
 模板四点要素
 
 - 1、初始化：start=0、end=len-1

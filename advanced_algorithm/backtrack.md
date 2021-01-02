@@ -61,7 +61,7 @@ func backtrack(nums []int, pos int, list []int, result *[][]int) {
 ### [subsets-ii](https://leetcode-cn.com/problems/subsets-ii/)
 
 > 给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。说明：解集不能包含重复的子集。
-
+>行：这类包含重复元素序列，都需要进行排序，相同的值挨着的那个序列就是唯一的排列，选择时从左往右选未被选择的点，这样不会重复，原本的排列顺序就是其解
 ```go
 import (
 	"sort"
@@ -147,7 +147,7 @@ func backtrack(nums []int, visited []bool, list []int, result *[][]int) {
 ### [permutations-ii](https://leetcode-cn.com/problems/permutations-ii/)
 
 > 给定一个可包含重复数字的序列，返回所有不重复的全排列。
-
+>行：这类包含重复元素序列，都需要进行排序，相同的值挨着的那个序列就是唯一的排列，选择时从左往右选未被选择的点，这样不会重复，原本的排列顺序就是其解
 ```go
 import (
 	"sort"

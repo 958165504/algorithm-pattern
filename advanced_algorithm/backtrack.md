@@ -199,9 +199,13 @@ func backtrack(nums []int, visited []bool, list []int, result *[][]int) {
 - [ ] [permutations](https://leetcode-cn.com/problems/permutations/)
 - [ ] [permutations-ii](https://leetcode-cn.com/problems/permutations-ii/)
 
-挑战题目
-
+挑战题目 
 - [ ] [combination-sum](https://leetcode-cn.com/problems/combination-sum/)
+> 行
+> 做题思路：回溯（这道题和 纸币买东西题类似）  
+> 先画出树的结构，每个节点下所有的节点再作为子节点。  
+> 剪枝：由于这个树是全排列，在路径之和大于target时就剪掉  
+> 之后发现路径会出现重复的子序列（由于是全排列），因此设置一个start，使得树的每个节点的子节点必须大于等于父节点，这样不会出现重复的，小的永远在前，这样重复序列的排列只有一种情况。 
 - [ ] [letter-combinations-of-a-phone-number](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 - [ ] [palindrome-partitioning](https://leetcode-cn.com/problems/palindrome-partitioning/)
 - [ ] [restore-ip-addresses](https://leetcode-cn.com/problems/restore-ip-addresses/)

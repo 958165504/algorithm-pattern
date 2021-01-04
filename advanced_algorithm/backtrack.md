@@ -1,5 +1,8 @@
 # 回溯法
 
+## 行：
+>1.总结：做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件  
+   
 ## 背景
 
 回溯法（backtrack）常用于遍历列表所有子集，是 DFS 深度搜索一种，一般用于全排列，穷尽所有可能，遍历的过程实际上是一个决策树的遍历过程。时间复杂度一般 O(N!)，它不像动态规划存在重叠子问题可以优化，回溯算法就是纯暴力穷举，复杂度一般都很高。
@@ -208,5 +211,6 @@ func backtrack(nums []int, visited []bool, list []int, result *[][]int) {
 > 之后发现路径会出现重复的子序列（由于是全排列），因此设置一个start，使得树的每个节点的子节点必须大于等于父节点，这样不会出现重复的，小的永远在前，这样重复序列的排列只有一种情况。 
 - [ ] [letter-combinations-of-a-phone-number](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 - [ ] [palindrome-partitioning](https://leetcode-cn.com/problems/palindrome-partitioning/)
+> 行 看的题解 做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件  
 - [ ] [restore-ip-addresses](https://leetcode-cn.com/problems/restore-ip-addresses/)
 - [ ] [permutations](https://leetcode-cn.com/problems/permutations/)

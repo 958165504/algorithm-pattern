@@ -212,5 +212,13 @@ func backtrack(nums []int, visited []bool, list []int, result *[][]int) {
 - [ ] [letter-combinations-of-a-phone-number](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 - [ ] [palindrome-partitioning](https://leetcode-cn.com/problems/palindrome-partitioning/)
 > 行 看的题解 做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件  
-- [ ] [restore-ip-addresses](https://leetcode-cn.com/problems/restore-ip-addresses/)
+- [ ] [restore-ip-addresses](https://leetcode-cn.com/problems/restore-ip-addresses/)  
+> 行   
+>   思路：耶，自己写出来了。  
+>    方法：先画树，树的每一层兄弟节点就是回溯的一次for  
+>          根据画树时的剪枝来进行for里面的兄弟节点剪枝，根据每一条分支的结尾来写结束语句  
+>    注意点；1.substring的end索引需要多移一位  
+>           2.注意索引start == s.length() 而不是<  
+>           3.StringBuilder 拼接用append() 而不是+= ; "a"+"b"纯粹字符串拼接其实也是先创建了一个StringBuilder对象，在进行append();  
+
 - [ ] [permutations](https://leetcode-cn.com/problems/permutations/)

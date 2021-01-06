@@ -2,7 +2,77 @@
 
 ## 行：
 >1.总结：做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件  
-   
+>2. 回溯模板
+```java
+	result = []
+	def backtrack(路径, 选择列表):
+	    if 满足结束条件:
+		result.add(路径)
+		return
+
+	    for 选择 in 选择列表:
+		做选择
+		backtrack(路径, 选择列表)
+		撤销选择
+```
+>3.子集、组合、排列的模板
+
+```java
+//子集 (要用一个 start 排除已经选择过的数字。)
+void backtrack(vector<int>& nums, int start, vector<int>& track) {
+    res.push_back(track);
+    for (int i = start; i < nums.size(); i++) {
+        // 做选择
+        track.push_back(nums[i]);
+        // 回溯
+        backtrack(nums, i + 1, track);
+        // 撤销选择
+        track.pop_back();
+    }
+}
+//组合：k 限制了树的高度，n 限制了树的宽度(要用一个 start 排除已经选择过的数字。)
+void backtrack(int n, int k, int start, vector<int>& track) {
+    // 到达树的底部
+    if (k == track.size()) {
+        res.push_back(track);
+        return;
+    }
+    // 注意 i 从 start 开始递增
+    for (int i = start; i <= n; i++) {
+        // 做选择
+        track.push_back(i);
+        backtrack(n, k, i + 1, track);
+        // 撤销选择
+        track.pop_back();
+    }
+}
+//排列 (contains 方法排除已经选择的数字)
+void backtrack(int[] nums, LinkedList<Integer> track) {
+    // 触发结束条件
+    if (track.size() == nums.length) {
+        res.add(new LinkedList(track));
+        return;
+    }
+    
+    for (int i = 0; i < nums.length; i++) {
+        // 排除不合法的选择
+        if (track.contains(nums[i]))
+            continue;
+        // 做选择
+        track.add(nums[i]);
+        // 进入下一层决策树
+        backtrack(nums, track);
+        // 取消选择
+        track.removeLast();
+    }
+}
+记住这几种树的形状，就足以应对大部分回溯算法问题了，无非就是 start 或者 contains 剪枝，也没啥别的技巧了。
+```
+> 4.回溯与递归、位运算解题比较：回溯的做选择和撤销选择，其实和题解中的用递归或位运算从1~n,每个元素加入或者不加入两种情况思路一样
+> 5.遇到重复子集问题(需要先排序，重复元素的一小段此时的顺序就是唯一的排列，避免重复)，为了消去重复的子集，需要先将选择列表进行排序，再在每一轮start选子集的时候，遇到相同和前一个的就跳过，
+[重复子集](https://leetcode-cn.com/problems/subsets-ii/)
+
+
 ## 背景
 
 回溯法（backtrack）常用于遍历列表所有子集，是 DFS 深度搜索一种，一般用于全排列，穷尽所有可能，遍历的过程实际上是一个决策树的遍历过程。时间复杂度一般 O(N!)，它不像动态规划存在重叠子问题可以优化，回溯算法就是纯暴力穷举，复杂度一般都很高。

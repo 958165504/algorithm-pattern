@@ -11,59 +11,57 @@ void sort(int[] nums) {
     // 以保证较高的效率，我们暂时省略这个细节
     sort(nums, 0, nums.length - 1);
 }
+void quickSort(int[] nums, int low, int high){
 
-/* 快速排序核心逻辑 */
-void sort(int[] nums, int lo, int hi) {
-    if (lo >= hi) return;
-    // 通过交换元素构建分界点索引 p
-    int p = partition(nums, lo, hi);
-    // 现在 nums[lo..p-1] 都小于 nums[p]，
-    // 且 nums[p+1..hi] 都大于 nums[p]
-    sort(nums, lo, p - 1);
-    sort(nums, p + 1, hi);
+	if(low >= high)return;
+	int pivot = partition(nums,low,high);
+	quickSort(nums,low,pivot - 1);
+	quickSort(nums, pivot + 1, high);
 }
-int partition(int[] nums, int lo, int hi) {
-    if (lo == hi) return lo;
-    // 将 nums[lo] 作为默认分界点 pivot
-    int pivot = nums[lo];
-    // j = hi + 1 因为 while 中会先执行 --
-    int i = lo, j = hi + 1;
-    while (true) {
-        // 保证 nums[lo..i] 都小于 pivot
-        while (nums[++i] < pivot) {
-            if (i == hi) break;
-        }
-        // 保证 nums[j..hi] 都大于 pivot
-        while (nums[--j] > pivot) {
-            if (j == lo) break;
-        }
-        if (i >= j) break;
-        // 如果走到这里，一定有：
-        // nums[i] > pivot && nums[j] < pivot
-        // 所以需要交换 nums[i] 和 nums[j]，
-        // 保证 nums[lo..i] < pivot < nums[j..hi]
-        swap(nums, i, j);
-    }
-    // 将 pivot 值交换到正确的位置
-    swap(nums, j, lo);
-    // 现在 nums[lo..j-1] < nums[j] < nums[j+1..hi]
-    return j;
-}
+int partition(int[] nums, int low, int high){//分区
+	int pivotKey = nums[low];
+	while(low < high){
+	    while (low < high && nums[high] >= pivotKey)
+		high--;
+	    swap(nums,low,high);//行：每次移动暂停切换时，都换交换一次，将pivotKey换到另一端，继而移动下一端
 
-// 交换数组中的两个元素
-void swap(int[] nums, int i, int j) {
-    int temp = nums[i];
-    nums[i] = nums[j];
-    nums[j] = temp;
+	    while (low < high && nums[low] <= pivotKey)
+		low++;
+	    swap(nums,low,high);
+	}
+	return low;
+}
+void swap(int[] nums, int low, int high){
+	int temp = nums[low];
+	nums[low] = nums[high];
+	nums[high] = temp;
 }
 ```
-
-
-
-
-
-
-
+```java
+行：快速选择算法(快排+二分查找结合)
+题目要求的是「第 k 个最大元素」  
+总结一下，快速选择算法就是快速排序的简化版，复用了 partition 函数，快速定位第 k 大的元素。相当于对数组部分排序而不需要完全排序，从而提高算法效率，将平均时间复杂度降到 O(N)。
+int findKthLargest(int[] nums, int k) {
+    int lo = 0, hi = nums.length - 1;
+    // 索引转化
+    k = nums.length - k;
+    while (lo <= hi) {
+        // 在 nums[lo..hi] 中选一个分界点
+        int p = partition(nums, lo, hi);
+        if (p < k) {
+            // 第 k 大的元素在 nums[p+1..hi] 中
+            lo = p + 1;
+        } else if (p > k) {
+            // 第 k 大的元素在 nums[lo..p-1] 中
+            hi = p - 1;
+        } else {
+            // 找到第 k 大元素
+            return nums[p];
+        }
+    }
+    return -1;
+}
+```
 
 ```go
 func QuickSort(nums []int) []int {

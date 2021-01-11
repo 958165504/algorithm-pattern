@@ -2,7 +2,32 @@
 
 ## 常考排序
 
-### 快速排序
+### 快速排序  
+> 快速排序就是个二叉树的前序遍历，归并排序就是个二叉树的后续遍历```
+```java
+//快排框架：前序遍历
+void sort(int[] nums, int lo, int hi) {
+    /****** 前序遍历位置 ******/
+    // 通过交换元素构建分界点 p
+    int p = partition(nums, lo, hi);
+    /************************/
+
+    sort(nums, lo, p - 1);
+    sort(nums, p + 1, hi);
+}
+//归并框架：后序遍历
+void sort(int[] nums, int lo, int hi) {
+    int mid = (lo + hi) / 2;
+    sort(nums, lo, mid);
+    sort(nums, mid + 1, hi);
+
+    /****** 后序遍历位置 ******/
+    // 合并两个排好序的子数组
+    merge(nums, lo, mid, hi);
+    /************************/
+}
+```
+
 ```java
 行
 /* 快速排序主函数 */

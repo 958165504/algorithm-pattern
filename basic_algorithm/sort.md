@@ -170,6 +170,59 @@ func merge(left, right []int) (result []int) {
 
 ### 堆排序
 
+#### 行：二叉堆 推排序思想
+
+>    构建初始堆，将待排序列构成一个大顶堆(或者小顶堆)，升序大顶堆，降序小顶堆；
+>    将堆顶元素与堆尾元素交换，并断开(从待排序列中移除)堆尾元素。
+>    重新构建堆。
+>    重复2~3，直到待排序列中只剩下一个元素(堆顶元素)。
+
+```java 
+//行：二叉堆(最大堆)的性质，每个结点比其子节点都大，因为为完全二叉树很容易找到父、左子、右子节点。用数组来存这个完全二叉树，arr[0]不用(如：2的父：2/2=1，索引1必须为根)
+// 父节点的索引
+int parent(int root) {
+    return root / 2;
+}
+// 左孩子的索引
+int left(int root) {
+    return root * 2;
+}
+// 右孩子的索引
+int right(int root) {
+    return root * 2 + 1;
+}
+```
+```java
+//行：上浮函数
+private void swim(int k) {
+    // 如果浮到堆顶，就不能再上浮了
+    while (k > 1 && less(parent(k), k)) {
+        // 如果第 k 个元素比上层大
+        // 将 k 换上去
+        exch(parent(k), k);
+        k = parent(k);
+    }
+}
+```
+```java
+//下沉函数
+private void sink(int k) {
+    // 如果沉到堆底，就沉不下去了
+    while (left(k) <= N) {
+        // 先假设左边节点较大
+        int older = left(k);
+        // 如果右边节点存在，比一下大小
+        if (right(k) <= N && less(older, right(k)))
+            older = right(k);
+        // 结点 k 比俩孩子都大，就不必下沉了
+        if (less(older, k)) break;
+        // 否则，不符合最大堆的结构，下沉 k 结点
+        exch(k, older);
+        k = older;
+    }
+}
+```
+
 用数组表示的完美二叉树 complete binary tree
 
 > 完美二叉树 VS 其他二叉树
@@ -187,7 +240,7 @@ package main
 
 func HeapSort(a []int) []int {
     // 1、无序数组a
-	// 2、将无序数组a构建为一个大根堆
+	// 2、将无序数组a构建为一个大根堆【行：因为sink需要节点有左右子节点，因此构建时需要从完全二叉树的一个父节点开始下沉归位】
 	for i := len(a)/2 - 1; i >= 0; i-- {
 		sink(a, i, len(a))
 	}

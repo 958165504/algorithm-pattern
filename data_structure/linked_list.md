@@ -1,5 +1,18 @@
 # 链表
 
+行总结：  
+>1） 链表回溯递归，使得可以往前走，模拟快慢指针，如回文链表的判断
+#### [remove-duplicates-from-sorted-list](https://labuladong.gitbook.io/algo/shu-ju-jie-gou-xi-lie/shou-ba-shou-shua-lian-biao-ti-mu-xun-lian-di-gui-si-wei/pan-duan-hui-wen-lian-biao)
+```java
+//递归反转链表
+ListNode reverse(ListNode head) {
+    if (head.next == null) return head;
+    ListNode last = reverse(head.next);//回溯时，尾结点为新的头结点
+    head.next.next = head;
+    head.next = null;
+    return last;//将尾结点一直向上传递，直到翻转完返回新链表头结点
+}
+```
 ## 基本技能
 
 链表相关的核心点

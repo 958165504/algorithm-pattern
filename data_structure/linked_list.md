@@ -77,16 +77,17 @@ func deleteDuplicates(head *ListNode) *ListNode {
 }
 ```
 
-注意点
-• A->B->C 删除 B，A.next = C
-• 删除用一个 Dummy Node 节点辅助（允许头节点可变）
-• 访问 X.next 、X.value 一定要保证 X != nil
+注意点  
+• A->B->C 删除 B，A.next = C  
+• 删除用一个 Dummy Node 节点辅助（允许头节点可变）  
+• 访问 X.next 、X.value 一定要保证 X != nil  
 
 ### [reverse-linked-list](https://leetcode-cn.com/problems/reverse-linked-list/)
 
 > 反转一个单链表。
 
-思路：用一个 prev 节点保存向前指针，temp 保存向后的临时指针
+思路：用一个 prev 节点保存向前指针，temp 保存向后的临时指针  
+>行：不用多两个变量，每一层递归，head就是prev，head.next就是后继节点successor  
 
 ```go
 func reverseList(head *ListNode) *ListNode {

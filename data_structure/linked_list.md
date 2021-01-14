@@ -235,7 +235,7 @@ func partition(head *ListNode, x int) *ListNode {
 > 在  *O*(*n* log *n*) 时间复杂度和常数级空间复杂度下，对链表进行排序。
 
 思路：归并排序，找中点和合并操作
-
+### >行：链表的归并排序，此题重要，包含了快慢指针找中点，合并两链表等操作
 ```go
 func sortList(head *ListNode) *ListNode {
     // 思路：归并排序，找中点和合并操作

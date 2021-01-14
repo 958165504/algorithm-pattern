@@ -157,8 +157,8 @@ func reverseBetween(head *ListNode, m int, n int) *ListNode {
 
 > 将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
 
-思路：通过 dummy node 链表，连接各个元素
-
+思路：通过 dummy node 链表，连接各个元素  
+>行：有点类似于归并排序回溯时merge，对两序列进行合并到一个，谁小就取谁
 ```go
 func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
     dummy := &ListNode{Val: 0}

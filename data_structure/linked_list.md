@@ -16,7 +16,6 @@ ListNode reverse(ListNode head) {
 ## 基本技能
 
 链表相关的核心点
-
 - null/nil 异常处理
 - dummy node 哑巴节点
 - 快慢指针

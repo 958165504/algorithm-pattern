@@ -1,10 +1,18 @@
 # 二叉树
 
-## 行 ：总结
->1 根据题意，思考当站在一个二叉树节点需要做什么，到底用什么遍历顺序就清楚了。
->2 后序遍历，采用序列化二叉树来比较子树相等 [652. 寻找重复的子树](https://leetcode-cn.com/problems/find-duplicate-subtrees/)
+## 行 ：总结  
 
+>1 根据题意，思考当站在一个二叉树节点需要做什么，到底用什么遍历顺序就清楚了。  
 
+>2 后序遍历，采用序列化二叉树来比较子树相等 [652. 寻找重复的子树](https://leetcode-cn.com/problems/find-duplicate-subtrees/)  
+>3.根据前序和中序序列，复原二叉树 [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)  
+```java
+	/*
+	思路：由前序和后序序列来构造二叉树
+	1 前序遍历序列的首部为根节点
+	2 在根据根节点值可将中序分成左右两半
+	*/
+```
 ## 知识点
 
 ### 二叉树遍历

@@ -21,7 +21,8 @@
 
 > 6) 平衡二叉树：一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 （思路：使用分治法从底往上比较左右子树深度得到本子树的深度，判断此时左右子树是否满足不平衡，进行标志记录。）  
  
- > 7) 在BST中搜索一个数  (行：利用二叉搜索树剪枝)
+ > 7) 在BST中搜索一个数  (行：利用二叉搜索树剪枝)  
+   [700. 二叉搜索树中的搜索](https://leetcode-cn.com/problems/search-in-a-binary-search-tree/)  
  ```java
  boolean isInBST(TreeNode root, int target) {
     if (root == null) return false;

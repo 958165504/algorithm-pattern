@@ -16,13 +16,24 @@
 > 4) BST 转化累加树 :从大到小降序打印 BST 节点的值，如果维护一个外部累加变量sum，然后把sum赋值给 BST 中的每一个节点，不就将 BST 转化成累加树了吗?    
 [把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)  
 
-> 4) 验证二叉搜索树 : 左子树.max < cur < 右子树,min , 因此利用前序遍历，逐步缩小范围往下判断每个结点是否符合，当不符合则向上回溯false， 利用前序遍历 比 后序遍历的 好处，当发现错误时，可以及时停止向下了，减少不必要的递归。  
+> 5) 验证二叉搜索树 : 左子树.max < cur < 右子树,min , 因此利用前序遍历，逐步缩小范围往下判断每个结点是否符合，当不符合则向上回溯false， 利用前序遍历 比 后序遍历的 好处，当发现错误时，可以及时停止向下了，减少不必要的递归。  
 [验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)  
 
-> 5) 平衡二叉树：一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 （思路：使用分治法从底往上比较左右子树深度得到本子树的深度，判断此时左右子树是否满足不平衡，进行标志记录。）  
-
-
-
+> 6) 平衡二叉树：一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 （思路：使用分治法从底往上比较左右子树深度得到本子树的深度，判断此时左右子树是否满足不平衡，进行标志记录。）  
+ 
+ > 7) 在BST中搜索一个数  (行：利用二叉搜索树剪枝)
+ ```java
+ boolean isInBST(TreeNode root, int target) {
+    if (root == null) return false;
+    if (root.val == target)
+        return true;
+    if (root.val < target) 
+        return isInBST(root.right, target);
+    if (root.val > target)
+        return isInBST(root.left, target);
+    // root 该做的事做完了，顺带把框架也完成了，妙
+}
+ ```
 
 
 ## 定义

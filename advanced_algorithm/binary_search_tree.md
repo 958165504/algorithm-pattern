@@ -1,16 +1,54 @@
 # 二叉搜索树
 ## 自我总结：
 > 1)中序遍历--》升序  
-> 2) 删除二叉搜索树的某个点，分三种情况，主要思路还是二叉搜索树的升序规律，找它的前驱或者后继来填  
+> 2) 【最难】删除二叉搜索树的某个点，分三种情况，主要思路还是二叉搜索树的升序规律，找它的前驱或者后继来填  
+[450. 删除二叉搜索树中的节点](https://leetcode-cn.com/problems/delete-node-in-a-bst/)  
 ```java
     看的题解：
     找前驱：先走当前节点的左节点，然后一直右
     找后继：先走当前节点的右节点，然后一直左
 
     算法思路：
-        (1)如果该节点是叶子节点，则直接删除它：root = null。
-        (2)如果该节点不是叶子节点且有右节点，则用它的后继节点的值替代 root.val = successor.val，然后删除后继节点。
-        (3)如果该节点不是叶子节点且只有左节点，则用它的前驱节点的值替代 root.val = predecessor.val，然后删除前驱节点。
+        (1)无子节点，直接删除
+        (2)存在一个子树，直接用子树替代该节点
+        (3)左右子树都存在,找右子树最小（后驱），替代该节点
+        
+    public TreeNode deleteNode(TreeNode root, int key) {
+        //结束条件
+        if(root == null)
+            return null;
+        //前序遍历，找到该值
+        if(root.val == key){
+            //1）无子节点，直接删除
+            if(root.left == null && root.right == null)
+                return null;
+            //2）存在一个子树，直接用子树替代该节点
+            if(root.left == null) return root.right;
+            if(root.right == null) return root.left;
+            //3）左右子树都存在,找右子树最小（后驱），替代该节点
+            if(root.right != null && root.left != null){
+                //找后驱
+                TreeNode min = MinNode(root.right);
+                //后驱替换该节点
+                root.val = min.val;
+                //删除后驱
+                 root.right = deleteNode(root.right, min.val);
+            }
+        }else if(root.val > key){
+            //左子树向下找
+            root.left = deleteNode(root.left, key);
+        }else if(root.val < key){
+            //右子树向下找
+            root.right = deleteNode(root.right, key);
+        }
+        return root;
+    }
+    //找最小值
+    public TreeNode MinNode(TreeNode node){
+        // BST 最左边的就是最小的
+        while (node.left != null) node = node.left;
+        return node;
+    }
 ```  
 > 3) 高效计算数据流的中位数 尽量使用二叉搜索树的【左大右小特性】，这样速度是logn级别的，而使用【中序遍历为升序】的特性，速度才为o(n)    
 > 4) BST 转化累加树 :从大到小降序打印 BST 节点的值，如果维护一个外部累加变量sum，然后把sum赋值给 BST 中的每一个节点，不就将 BST 转化成累加树了吗?    

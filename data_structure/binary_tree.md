@@ -13,6 +13,62 @@
 	2 在根据根节点值可将中序分成左右两半
 	*/
 ```
+>4 序列化、反序列化二叉树
+[297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)  
+```java
+    1)使用前序遍历序列化，
+    反序列化时，其实是按照前序遍历序列化的顺序，首部为头结点，递归分割，直到遇到"#"返回，就是按照前序遍历再访问一次序列，所以只要将列表的第一个元素取出作为根节点，剩下的交给递归函数去解决即可。
+    
+    2)同样道理：使用后序遍历序列化
+    root 的值是列表的最后一个元素。我们应该从后往前取出列表元素，先用最后一个元素构造 root，然后递归调用生成 root 的左右子树。注意，根据上图，从后往前在 nodes 列表中取元素，一定要先构造 root.right 子树，后构造 root.left 子树。
+        东哥的解法
+    String SEP = ",";
+    String NULL = "#";
+    /* 主函数，将二叉树序列化为字符串 */
+    String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        return sb.toString();
+    }
+
+    /* 辅助函数，将二叉树存入 StringBuilder */
+    void serialize(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append(NULL).append(SEP);
+            return;
+        }
+        /****** 前序遍历位置 ******/
+        sb.append(root.val).append(SEP);
+        /***********************/
+        serialize(root.left, sb);
+        serialize(root.right, sb);
+    }
+
+    /* 主函数，将字符串反序列化为二叉树结构 */
+    TreeNode deserialize(String data) {
+        // 将字符串转化成列表
+        LinkedList<String> nodes = new LinkedList<>();
+        for (String s : data.split(SEP)) {
+            nodes.addLast(s);
+        }
+        return deserialize(nodes);
+    }
+    
+    /* 辅助函数，通过 nodes 列表构造二叉树 */
+    TreeNode deserialize(LinkedList<String> nodes) {
+        if (nodes.isEmpty()) return null;
+        /****** 前序遍历位置 ******/
+        // 列表最左侧就是根节点
+        String first = nodes.removeFirst();
+        if (first.equals(NULL)) return null;
+        TreeNode root = new TreeNode(Integer.parseInt(first));
+        /***********************/
+        root.left = deserialize(nodes);
+        root.right = deserialize(nodes);
+        return root;
+    }
+```
+
 ## 知识点
 
 ### 二叉树遍历

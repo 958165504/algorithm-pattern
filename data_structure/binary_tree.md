@@ -69,6 +69,45 @@
     }
 ```
 
+> 二叉树的最近公共祖先
+[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)  
+```java
+    /*
+    刷第二遍：2021 01 28，这一遍主要是明确递归函数的定义，参数列表，得到子树结果应该干嘛(后序遍历)
+    * 函数定义：返回子树是否存在p  q 点
+    *
+    *   1. 当p,q 都不存在以root为根的子树中，返回null
+    *   2. 存在一个点，返回这个点，相当于把这个点向上冒泡
+    *   3. p,q都存在root为根的子树中，返回root（因为后续遍历，所以第一个满足肯定为最近公共祖先节点）
+    * */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //结束条件
+        if(root == null)
+            return null;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left != null && right != null){
+            //p,q都找到
+            return root;
+        }
+        else if (left == null && right == null){
+            //左右子树都不包含
+            //若root是其一，返回root，否则返回null，表示以root为根的子树都不包含p q
+            if(root == p || root == q)
+                return root;
+            else 
+                return null;
+        }
+        else {
+            //左右子树中 存在一个
+            //若root为另一个，则root就为最近祖先,否则返回那一个子树
+            if(root == p || root == q)
+                return root;
+            return left != null ? left : right;
+        }
+    }
+```
+
 ## 知识点
 
 ### 二叉树遍历

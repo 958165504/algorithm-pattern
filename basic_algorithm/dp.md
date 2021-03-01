@@ -38,6 +38,35 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 对h降序原因：对于宽度w相同的数对，要对其高度h进行降序排序。因为两个宽度相同的信封不能相互包含的，而逆序排序保证在w相同的数对中最多只选取一个计入 LIS。  
 ```
 
+> 7) 子序列解题模板：最长回文子序列 
+```java
+1、第一种思路模板是一个一维的 dp 数组：
+int n = array.length;
+int[] dp = new int[n];
+for (int i = 1; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+        dp[i] = 最值(dp[i], dp[j] + ...)
+    }
+}
+举个我们写过的例子 最长递增子序列，在这个思路中 dp 数组的定义是：
+在子数组array[0..i]中，以array[i]结尾的目标子序列（最长递增子序列）的长度是dp[i]。
+
+2、第二种思路模板是一个二维的 dp 数组：
+int n = arr.length;
+int[][] dp = new dp[n][n];
+for (int i = 0; i < n; i++) {
+    for (int j = 1; j < n; j++) {
+        if (arr[i] == arr[j]) 
+            dp[i][j] = dp[i][j] + ...
+        else
+            dp[i][j] = 最值(...)
+    }
+}
+这种思路运用相对更多一些，尤其是涉及两个字符串/数组的子序列。本思路中 dp 数组含义又分为「只涉及一个字符串」和「涉及两个字符串」两种情况。
+```
+[516. 最长回文子序列（动态规划）](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/516-zui-chang-hui-wen-zi-xu-lie-dong-tai-sily/)  
+注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描】
+
 ## 背景
 
 先从一道题目开始~

@@ -66,6 +66,23 @@ for (int i = 0; i < n; i++) {
 [516. 最长回文子序列（动态规划）](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/516-zui-chang-hui-wen-zi-xu-lie-dong-tai-sily/)  
 注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描  
 
+> 8) 0-1背包问题
+```java
+dp[i][w]的定义如下：对于前i个物品，当前背包的容量为w，这种情况下可以装的最大价值是dp[i][w]。  
+int dp[N+1][W+1]
+dp[0][..] = 0
+dp[..][0] = 0
+
+for i in [1..N]:
+    for w in [1..W]:
+        dp[i][w] = max(
+            把物品 i 装进背包,
+            不把物品 i 装进背包
+        )
+return dp[N][W]
+```
+[416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)  
+
 
 ## 背景
 

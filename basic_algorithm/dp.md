@@ -83,6 +83,17 @@ return dp[N][W]
 ```
 [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)  
 
+> 9) 贪心算法
+```java
+/*
+* 贪心算法：贪心算法之区间调度问题
+* 先排序,从低往上，取end1 <= start2
+* 			是：则收下这个区间，取end2为末尾依次递进
+* 			不是：则比较下一个区间 end1 <= start3
+* 因为是排了序的，相当于求：尽量使得区间填满时间线【使得时间线最长】
+* */
+```
+[435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)  
 
 ## 背景
 

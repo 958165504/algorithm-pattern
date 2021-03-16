@@ -95,6 +95,87 @@ return dp[N][W]
 ```
 [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)  
 
+> 10) 打家劫舍
+[198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
+
+```java
+
+    //*方法一：动态规划从上往下：打家劫舍1：动态规划，先写出递归的，容易想到*/
+	//1.状态：就是index索引，到哪儿了
+    	////2.选择：当前点抢还是不抢
+    	////两种选择的最大值，每种选择都局部最优，推向全局最优
+
+    //方法2：从下往上
+    /*2.打家劫舍1：动态规划 从下往上解法*/
+    //【自己还是反映不过来从底往上的思路，都是看了递归 才写出来的
+    // 从低往上的动态规划：看做哪选择，需要和前面的哪个dp[]递推而来
+    // 】
+    //basecase对于我也比较困难 找到
+
+
+// /*方法一：动态规划从上往下：打家劫舍1：动态规划，先写出递归的，容易想到*/
+    // int [] memeory ;
+    // public int rob(int[] nums) {
+
+    //     //备忘录 赋初值
+    //     memeory = new int[nums.length];
+    //     Arrays.fill(memeory,-1);
+    //     return robTraverse(nums,0);
+    // }
+    // public int robTraverse(int[] nums,int index) {
+    //     //1.状态：就是index索引，到哪儿了
+    //     //2.选择：当前点抢还是不抢
+    //     //两种选择的最大值，每种选择都局部最优，推向全局最优
+
+    //     //basecase
+    //     if(index >= nums.length)
+    //         return 0;
+    //     //选择之前，看下备忘录有现成的没,消除重复子问题
+    //     if(memeory[index] != -1)
+    //         return memeory[index];
+
+    //     //选择：抢不抢
+    //     int money1 = robTraverse(nums,index + 2) + nums[index];//枪
+    //     int money2 = robTraverse(nums,index + 1);//不枪
+
+    //     return memeory[index] = Math.max(money1,money2) ;//返回两种选择的最大值，每种选择都局部最优，推向全局最优
+    // }
+    //方法2：从下往上
+    /*2.打家劫舍1：动态规划 从下往上解法*/
+    //【自己还是反映不过来从底往上的思路，都是看了递归 才写出来的
+    // 从低往上的动态规划：看做哪选择，需要和前面的哪个dp[]递推而来
+    // 】
+    //basecase对于我也比较困难 找到
+    public int rob(int[] nums) {
+        if(nums == null)
+            return 0;
+        if(nums.length <= 1)
+            return nums[0];
+
+        //1.dp[i] 定义：状态索引i时，可抢到的最大金额
+        int[] dp =new int[nums.length];
+        /*边界条件为
+        1.dp[0]=nums[0]只有一间房屋 则偷窃该房屋
+        2.dp[1]=max(nums[0],nums[1]) 只有两间房屋，选择其中金额较高的房屋进行偷窃
+        */
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0],nums[1]);
+
+        //2.选择：
+        for (int i = 2; i < dp.length; i++) {
+                //选择 ：抢还是不抢
+                dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]); //抢 | 不抢
+                //【自己还是反映不过来从底往上的思路，都是看了递归 才写出来的
+                // 从低往上的动态规划：看做哪选择，需要和前面的哪个dp[]递推而来
+                // 】
+        }
+        return dp[dp.length - 1];
+    }
+
+```
+
+
+
 ## 背景
 
 先从一道题目开始~

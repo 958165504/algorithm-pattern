@@ -64,9 +64,42 @@ int right_bound(int[] nums, int target) {
 }
 ```
 
-
-
-
+## hot100题
+ /*二分：重要的是  如何找到二分区间的那个条件， 反正以闭区间为根本就行，来判断如何分割区间
+[287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+```java
+ /*二分：重要的是  如何找到二分区间的那个条件， 反正以闭区间为根本就行，来判断如何分割区间
+    至于本题 right = mid; 还是以闭区间为指导中心，当cnt > mid 重复元素位于区间 [left, mid]，因此收缩时 right = mid，当left==right时，就找到这个数了，跳出
+    和模板的left <= right不同，这个是搜索某个确定的值，
+    反正以闭区间为根本就行，来判断如何分割区间
+    */
+    public int findDuplicate(int[] nums) {
+        int len = nums.length;
+        int left = 1;
+        int right = len - 1;
+        while (left < right) {
+            int mid = left + (right -left) / 2;
+            int cnt = 0;
+            for (int num : nums) {
+                if (num <= mid) {
+                    cnt += 1;
+                }
+            }
+            //以 [2, 4, 5, 2, 3, 1, 6, 7] 为例, 区间 [1,7] 的中位数是 4
+            // 根据抽屉原理，小于等于 4 的个数如果严格大于 4 个
+            // 此时重复元素一定出现在 [1, 4] 区间里
+            if (cnt > mid) {
+                // 重复元素位于区间 [left, mid]
+                right = mid;
+            } else {
+                // if 分析正确了以后，else 搜索的区间就是 if 的反面
+                // [mid + 1, right]
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+```
 ## 二分搜索模板
 
 给一个**有序数组**和目标值，找第一次/最后一次/任何一次出现的索引，如果没有出现返回-1

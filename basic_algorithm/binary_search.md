@@ -9,7 +9,7 @@
 int binary_search(int[] nums, int target) {
     int left = 0, right = nums.length - 1; 
     while(left <= right) {
-        int mid = left + (right - left) / 2;
+        int mid = left + (right - left) / 2;//left + (right - left) / 2就和(left + right) / 2的结果相同，但是有效防止了left和right太大直接相加导致溢出。
         if (nums[mid] < target) {
             left = mid + 1;
         } else if (nums[mid] > target) {
@@ -40,7 +40,7 @@ int left_bound(int[] nums, int target) {
     if (left >= nums.length || nums[left] != target)
         return -1;
     return left;//行：为什么【right,;eft】时，返回left元素？而不是right，选择哪一边呢？ 因为nums[mid] == target时是right = mid - 1右边界再动，而
-                //nums[mid] < target时 left = mid + 1;所以当Num[left]第一次等于num[mid]时就不再动了，而最终是right = mid - 1;跳出的【left,left】的边界，
+                //nums[mid] < target时 left = mid + 1;所以当Num[left]第一次等于num[mid]时就不再动了，而最终是right = mid - 1;跳出的【left,right】的边界，
                 //所以最左边的target是存在于left索引的。下面的最右边的target道理一样
 }
 

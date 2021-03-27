@@ -129,6 +129,38 @@ func swap(nums []int, i, j int) {
 ```
 
 ### 归并排序
+> 数组版 归并  
+```java
+    // 归并排序
+    private static void merge_sort(int[] arr, int l, int r) {
+        // 递归结束条件
+        if (l >= r) return;
+        // 以下都为逻辑部分
+        int mid = l + ((r - l) >> 1);
+        merge_sort(arr, l, mid);
+        merge_sort(arr, mid + 1, r);
+	
+        int[] tmp = new int[r - l + 1]; // 临时数组, 用于临时存储 [l,r]区间内排好序的数据
+        int i = l, j = mid + 1, k = 0;  // 两个指针
+        // 进行归并
+        while (i <= mid && j <= r) {
+            if (arr[i] <= arr[j]) 
+                tmp[k++] = arr[i++];
+            else
+                tmp[k++] = arr[j++];
+        }
+
+        while (i <= mid) tmp[k++] = arr[i++];
+        while (j <= r) tmp[k++] = arr[j++];
+
+        // 进行赋值
+        for (i = l, j = 0; i <= r; i++, j++)
+            arr[i] = tmp[j];
+    }
+```
+
+
+
 
 ```go
 func MergeSort(nums []int) []int {

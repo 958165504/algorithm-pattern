@@ -41,6 +41,34 @@
 - [二叉搜索树](./advanced_algorithm/binary_search_tree.md)
 - [回溯法](./advanced_algorithm/backtrack.md)
 
+### 第三章、必会算法技巧
+#### 3.3其他算法篇
+> 1 前缀和数组
+
+```java
+  //前缀和：可以随意求一个区间[i，j]的累加和 或者累加或
+  加--减
+  或--异或
+    static int subarraySum(int[] nums, int k) {
+        int n = nums.length;
+        // 构造前缀和
+        int[] sum = new int[n + 1];
+        sum[0] = 0;
+        for (int i = 0; i < n; i++)
+            sum[i + 1] = sum[i] | nums[i];//或 相当于加
+        int ans = 0;
+        // 穷举所有子数组
+        for (int i = 1; i <= n; i++)
+            for (int j = 0; j < i; j++){
+                if ((sum[i] ^ sum[j]) <= k)//异或相当于减
+                    ans++;
+            }
+        return ans;
+    }
+```
+- [前缀和技巧：解决子数组问题 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484488&idx=1&sn=848f76e86fce722e70e265d0c6f84dc3&chksm=9bd7fa40aca07356a6f16db72f5a56529044b1bdb2dcce2de4efe59e0338f0c313de682aef29&scene=21#wechat_redirect)
+
+
 ## 心得体会
 
 文章大部分是对题目的思路介绍，和一些问题的解析，有了思路还是需要自己手动写写的，所以每篇文章最后都有对应的练习题

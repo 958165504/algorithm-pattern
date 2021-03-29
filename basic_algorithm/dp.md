@@ -1,7 +1,7 @@
 # 动态规划
 
 # 自我总结
-> 1) 步骤：明确「状态」 -> 定义 dp 数组/函数的含义 -> 明确「选择取最值」-> 明确 base case  
+### > 1) 步骤：明确「状态」 -> 定义 dp 数组/函数的含义 -> 明确「选择取最值」-> 明确 base case  
 ```java
 # 凑零钱问题
 a.先确定「状态」，也就是原问题和子问题中变化的变量。由于硬币数量无限，所以唯一的状态就是目标金额amount。
@@ -20,24 +20,24 @@ def coinChange(coins: List[int], amount: int):
 
 d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0；当目标金额小于 0 时，无解，返回 -1：
 ```
-> 2) 最优子结构性质作为动态规划问题的必要条件，一定是让你求最值的，以后碰到那种恶心人的—**最值题，思路往动态规划想就对了，这就是套路**。  动态规划不就是**从最简单的 base case 往后推导吗**，可以想象成一个链式反应，不断以小博大。但只有符合最优子结构的问题，才有发生这种链式反应的性质。找最优子结构的过程，其实就是证明状态转移方程正确性的过程，**方程符合最优子结构就可以写暴力解了**，写出暴力解就可以看出有没有重叠子问题了，有则优化，无则 OK。这也是套路，经常刷题的朋友应该能体会。  
+### > 2) 最优子结构性质作为动态规划问题的必要条件，一定是让你求最值的，以后碰到那种恶心人的—**最值题，思路往动态规划想就对了，这就是套路**。  动态规划不就是**从最简单的 base case 往后推导吗**，可以想象成一个链式反应，不断以小博大。但只有符合最优子结构的问题，才有发生这种链式反应的性质。找最优子结构的过程，其实就是证明状态转移方程正确性的过程，**方程符合最优子结构就可以写暴力解了**，写出暴力解就可以看出有没有重叠子问题了，有则优化，无则 OK。这也是套路，经常刷题的朋友应该能体会。  
 
-> 3) dp 数组的遍历方向 :抓住两点： 1、遍历的过程中，所需的状态必须是已经计算出来的。2、遍历的终点必须是存储结果的那个位置。  
+### > 3) dp 数组的遍历方向 :抓住两点： 1、遍历的过程中，所需的状态必须是已经计算出来的。2、遍历的终点必须是存储结果的那个位置。  
 [labuladong 动态规划答疑篇 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484832&idx=1&sn=44ad2505ac5c276bf36eea1c503b78c3&chksm=9bd7fba8aca072be32f66e6c39d76ef4e91bdbf4ef993014d4fee82896687ad61da4f4fc4eda&scene=21#wechat_redirect)  
 
-> 4)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
+### > 4)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
 [labuladong 经动态规划：编辑距离 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484731&idx=3&sn=aa642cbf670feee73e20428775dff0b5&chksm=9bd7fb33aca0722568ab71ead8d23e3a9422515800f0587ff7c6ef93ad45b91b9e9920d8728e&scene=21#wechat_redirect)  
 [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  
 
-> 5）最长递增子序列 ： 已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
+### > 5）最长递增子序列 ： 已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
 ![image](https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4kgXtfMiaNRfjKJK5DiaHNAiaEckTjx0BjeFdSIXalPct8LfFicaGnZyaRCK0H0HYNF6nAfZHblloRu4w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)  
 
-> 6)最长递增子序列之信封嵌套问题 
+### > 6)最长递增子序列之信封嵌套问题 
 ```java
 先对宽度w进行升序排序，如果遇到w相同的情况，则按照高度h降序排序。之后把所有的h作为一个数组，在这个数组上计算 LIS 的长度就是答案。  
 对h降序原因：对于宽度w相同的数对，要对其高度h进行降序排序。因为两个宽度相同的信封不能相互包含的，而逆序排序保证在w相同的数对中最多只选取一个计入 LIS。  
 ```
-> 7) 子序列解题模板：最长回文子序列 
+### > 7) 子序列解题模板：最长回文子序列 
 ```java
 1、第一种思路模板是一个一维的 dp 数组：
 int n = array.length;
@@ -66,7 +66,7 @@ for (int i = 0; i < n; i++) {
 [516. 最长回文子序列（动态规划）](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/516-zui-chang-hui-wen-zi-xu-lie-dong-tai-sily/)  
 注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描  
 
-> 8) 0-1背包问题
+### > 8) 0-1背包问题
 ```java
 dp[i][w]的定义如下：对于前i个物品，当前背包的容量为w，这种情况下可以装的最大价值是dp[i][w]。  
 int dp[N+1][W+1]
@@ -83,7 +83,7 @@ return dp[N][W]
 ```
 [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)  
 
-> 9) 贪心算法
+### > 9) 贪心算法
 ```java
 /*
 * 贪心算法：贪心算法之区间调度问题
@@ -95,7 +95,7 @@ return dp[N][W]
 ```
 [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)  
 
-> 10) 打家劫舍
+### > 10) 打家劫舍
 [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
 
 ```java
@@ -174,7 +174,36 @@ return dp[N][W]
 
 ```
 
+### >11 乘积最大子数组（动态规划破解双重for）
+[152. 乘积最大子数组](https://leetcode-cn.com/problems/maximum-product-subarray/solution/152-cheng-ji-zui-da-zi-shu-zu-dong-tai-g-6nhn/)  
+//看的官方的解答
+    /*遇到暴力解需要两个for时，考虑用动态规划的话，只考虑一个端点再动，这样一次遍历完成O(n)
+    定义dp[i]：表示以i为结尾的子数组乘积max，dp[i] = max{dp[i-1]*ai,ai},
+    已知前面i-1为结尾子数组，到了i就考虑把i接到末尾，还是单独成一派
 
+    由于存在正负数，需要分正负两种情况比较最大值
+    如：a={5,6,−3,4,−3}，最大值序列{5,30,−3,4,−3}，但是最大值!=30,而是全部相乘
+    /
+     */
+```java
+	public int maxProduct(int[] nums) {
+            int length = nums.length;
+            int[] maxF = new int[length];
+            int[] minF = new int[length];
+            //赋初值，最坏的情况，最大值应该为自己一个数
+            System.arraycopy(nums, 0, maxF, 0, length);
+            System.arraycopy(nums, 0, minF, 0, length);
+            for (int i = 1; i < length; ++i) {
+                maxF[i] = Math.max(maxF[i - 1] * nums[i], Math.max(nums[i], minF[i - 1] * nums[i]));
+                minF[i] = Math.min(minF[i - 1] * nums[i], Math.min(nums[i], maxF[i - 1] * nums[i]));
+            }
+            int ans = maxF[0];
+            for (int i = 1; i < length; ++i) {
+                ans = Math.max(ans, maxF[i]);
+            }
+            return ans;
+        }
+```
 
 ## 背景
 

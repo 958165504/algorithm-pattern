@@ -266,6 +266,43 @@ return dp[N][W]
         }
 ```
 
+### 凑零钱类型问题
+[279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)  
+```java
+ /*
+    这道题和纸币买卖题一样，有一个选择列表，求金额的最少纸币数
+    方法一：递归暴力解：先算出选择列表choseList，然后想买卖问题一样，每次遍历试下所有的纸币，在每一轮选择循环中，选取最少的纸币数，但会溢出  可加上备忘录消除重复解‘
+    方法二：动态规划从下往上：由于动归是从底往上，i之前算出了，因此原理和递归+备忘录一样
+    for(i:n)
+        for(k:选择列表))
+            dp[i] = min(dp[i], dp[i - k]+1)
+    */
+
+    public int numSquares(int n) {
+        //动态规划
+        //生成选择列表
+        int maxSquareNum = (int) (Math.sqrt(n)) + 1;//考虑到根号为小数情况
+        int[] choseList = new int[maxSquareNum + 1];
+        for (int i = 1; i <= maxSquareNum; i++) {
+            choseList[i] = i * i;
+        }
+        //动态规划进行选择
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0] = 0;//basecase
+        for (int i = 1; i <= n; i++) {
+            //选择列表
+            for (int j = 1; j < choseList.length; j++) {
+                if(i - choseList[j] < 0)
+                    break;
+                dp[i] = Math.min(dp[i - choseList[j]] + 1, dp[i]);
+            }
+        }
+        return dp[n];
+    }
+```
+
+
 ## 背景
 
 先从一道题目开始~

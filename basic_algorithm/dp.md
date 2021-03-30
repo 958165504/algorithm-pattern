@@ -47,8 +47,7 @@ for (int i = 1; i < n; i++) {
         dp[i] = 最值(dp[i], dp[j] + ...)
     }
 }
-举个我们写过的例子 最长递增子序列，在这个思路中 dp 数组的定义是：
-在子数组array[0..i]中，以array[i]结尾的目标子序列（最长递增子序列）的长度是dp[i]。
+举个我们写过的例子 最长递增子序列，在这个思路中 dp 数组的定义是：在子数组array[0..i]中，以array[i]结尾的目标子序列（最长递增子序列）的长度是dp[i]。
 
 2、第二种思路模板是一个二维的 dp 数组：
 int n = arr.length;
@@ -65,6 +64,68 @@ for (int i = 0; i < n; i++) {
 ```
 [516. 最长回文子序列（动态规划）](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/516-zui-chang-hui-wen-zi-xu-lie-dong-tai-sily/)  
 注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描  
+```java
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        int [][] dp = new int[n][n];
+        /*
+        * 动态规划
+        * dp[i][j]定义，索引i j之间的最长回文子序列的最大长度
+        * 选择：当字符i , j 相等 dp[i][j] = dp[i+1][j-1] + 2;
+        *                  不相等 dp[i][j] = max(dp[i][j-1], dp[i+1][j])//当ij不等，分别舍弃j，i加入之前的子串，看求这两种情况的最大值
+        * basecase: 当下标i==j，一个字符串时,回文长度为1
+        */
+
+        //basecase
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j <= n - 1 ; j++) {
+                if(s.charAt(i) == s.charAt(j)){
+                    dp[i][j] = dp[i+1][j-1] + 2;
+                }else {
+                    dp[i][j] = Math.max(dp[i][j-1], dp[i+1][j]);
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+```
+
+
+### > 7) 回文子串解题思路：利用判断【i，j】区间是否为回文动态规划解法为基础来变形
+> 总结：关于回文的，都可以基于判断【i，j】区间是否为回文动态规划解法为基础，来进行穷举所有区间判断，来变相解题  
+dp[i][j] = (array[i] == array[j])&&( j - i < 3 || dp[i - 1][j - 1]);//动态规划状态
+    当i == j, 就去掉两端转移看i+1,j-1是否为回文
+    当j-i<3,只有一个 或两个 三个 且两端相等，那一定为回文  
+    
+[647. 回文子串（利用判断【i，j】区间是否为回文动态规划解法为基础）](https://leetcode-cn.com/problems/palindromic-substrings/solution/647-hui-wen-zi-chuan-li-yong-pan-duan-ij-aofk/)  
+```java
+/*
+思路：利用判断【i，j】区间是否为回文动态规划解法基础上，穷举出全部区间【i，j】，在用【i，j】是否为回文的动归解法判断，最后对每个回文区间累加计数，得到全部的回文子串数，O（n^2）
+
+拓展 :
+	1）5. 最长回文子串：根据判断【i，j】区间是否为回文动态规划解法，还可以用在求 ：穷举所有区间[ij]，来动归判断是否为回文，若是，然后不断更新j-i最大值，来求得最长回文串）
+        2）求最长子序列也是差不都的动归状态转移方程  
+				选择：当字符i , j 相等 dp[i][j] = dp[i+1][j-1] + 2;
+                                不相等 dp[i][j] = max(dp[i][j-1], dp[i+1][j])//当ij不等，分别舍弃j，i加入之前的子串，看求这两种情况的最大值
+
+*/
+ public int countSubstrings(String s) {
+        int polindromeCount = 0;//回文个数
+        char[] array = s.toCharArray();
+        boolean [][] dp = new boolean[array.length][array.length];//[i,j]区间是否为回文串
+        for (int j = 0; j < dp.length; j++) {
+            for (int i = 0; i <= j; i++) {
+                dp[i][j] = (array[i] == array[j])&&( j - i < 3 || dp[i + 1][j - 1]);//动态规划状态转移：
+                if (dp[i][j])
+                    polindromeCount++;
+            }
+        }
+        return polindromeCount;
+    }
+```
 
 ### > 8) 0-1背包问题
 ```java

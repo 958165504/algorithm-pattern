@@ -302,6 +302,150 @@ return dp[N][W]
     }
 ```
 
+### 股票买卖问题[动态规划+备忘录很好理解]
+> 参考东哥的算法[股票问题的一种通用解法 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484509&idx=1&sn=21ace57f19d996d46e82bd7d806a2e3c&source=41#wechat_redirect)  
+>模板
+```java
+//动态规划+备忘录：是在买卖股票的最佳时机I的基础上【只能一次交易】，不断的穷举卖出，在递归下一轮分片交易[sell+1,end]
+    /* 核心动态规划 选择代码，穷举
+    //选择：在以本次start买入的情况下，列举之后所有作为卖出时间点，再往下递归的最大值
+    for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            if(prices[sell] < curmin){
+                curmin = prices[sell];
+            }
+            maxProfit = Math.max(maxProfit,prices[sell] - curmin + maxProfitTraverse(prices, sell + 1));
+            //在sell索引轮卖掉，进入下一次交易选择区间[sell+1,end];
+        }
+    */
+```
+[122. 买卖股票的最佳时机 II（动态规划+备忘录）](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)  
+```java
+//动态规划+备忘录：是在买卖股票的最佳时机I的基础上【只能一次交易】，不断的穷举卖出，在递归下一轮分片[sell+1,end]
+    /* 核心动态规划 选择代码，穷举
+    //选择：在以本次start买入的情况下，列举之后所有作为卖出时间点，再往下递归的最大值
+    for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            if(prices[sell] < curmin){
+                curmin = prices[sell];
+            }
+            maxProfit = Math.max(maxProfit,prices[sell] - curmin + maxProfitTraverse(prices, sell + 1));
+            //在sell索引轮卖掉，进入下一次交易选择区间[sell+1,end];
+        }
+    */
+     public int maxProfit(int[] prices) {
+        memo = new int[prices.length];
+        Arrays.fill(memo,-1);
+        return maxProfitTraverse(prices,0);
+    }
+
+    int[] memo;
+    public int maxProfitTraverse(int[] prices, int start) {
+        //basecase
+        if(start >= prices.length - 1)
+            return 0;
+        if(memo[start] != -1)
+            return memo[start];
+        int maxProfit = 0;//本次递归交易的最大收益
+        int curmin = prices[start];//当前交易最低点
+        //选择：在以本次start买入的情况下，列举之后所有作为卖出时间点，再往下递归的最大值
+        for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+           
+            if(prices[sell] < curmin){
+                curmin = prices[sell];
+            }
+            maxProfit = Math.max(maxProfit,prices[sell] - curmin + maxProfitTraverse(prices, sell + 1));
+            //在sell索引轮卖掉，进入下一次交易选择区间[sell+1,end];
+        }
+        return memo[start] = maxProfit;
+    }
+```
+[309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)  
+```java
+    /*
+    思路：用labuladong的递归模板一改，还是递归的动归简单
+        //选择：基础还是简单的只有一次交易动归：//以当前start为买入点，维护本次交易的买入最小值，为了动归计算本次卖出点收益最大值dp[i]=max(dp[i-1],prices[i] - cruMin)，在不断向下递归
+        for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            //维护最小值
+            if(prices[sell] < curMin)
+                curMin = prices[sell];
+            curMaxProfit = Math.max(curMaxProfit, (prices[sell] - curMin) + dp(prices,sell + 2));//冷冻期+2
+        }
+    */
+    public int maxProfit(int[] prices) {
+        memo = new int[prices.length];
+        Arrays.fill(memo, -1);
+        int maxProfit = 0;
+        maxProfit = dp(prices, 0);
+        return maxProfit;
+    }
+    int[] memo;
+    private int dp(int[] prices, int start){//以start为买入点，收获的最大值
+        //basecase
+        if(start >= prices.length)//最后一天才买入股票，卖不出去了，收益为0
+            return 0;
+        //备忘录
+        if(memo[start] != -1)
+            return memo[start];
+        int curMin = prices[start];//以当前start为买入点，维护本次交易的买入最小值，
+                                    //为了动归计算本次卖出点收益最大值dp[i]=max(dp[i-1],prices[i] - cruMin)
+        int curMaxProfit = 0;
+        //选择
+        for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            //维护最小值
+            if(prices[sell] < curMin)
+                curMin = prices[sell];
+            curMaxProfit = Math.max(curMaxProfit, (prices[sell] - curMin) + dp(prices,sell + 2));//这儿跳2冷冻期
+        }  
+        return memo[start] = curMaxProfit;
+    }
+```
+[188. 买卖股票的最佳时机 IV](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/)  
+    注意：这儿的状态有两个 start , k，因此备忘录int[][] memo是二维的  
+```java
+ /*思路：在122. 买卖股票的最佳时机 II（动态规划+备忘录）基础上，增加了交易次数k
+    注意：这儿的状态有两个 start , k，因此备忘录int[][] memo是二维的
+    
+    //动态规划+备忘录：是在买卖股票的最佳时机I的基础上【只能一次交易】，不断的穷举卖出，在递归下一轮分片[sell+1,end]
+
+        核心动态规划 选择代码，穷举
+        for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            if(prices[sell] < curmin){
+                curmin = prices[sell];
+            }
+            maxProfit = Math.max(maxProfit,prices[sell] - curmin + maxProfitTraverse(prices, sell + 1));
+            //在sell索引轮卖掉，进入下一次交易选择区间[sell+1,end];
+        }    
+    */
+    int[][] memo;//注：动态规划的状态有两个，所以备忘录为二维
+    public int maxProfit(int k, int[] prices) {
+        memo = new int[prices.length][k+1];
+        for (int i = 0; i < memo.length; i++) {
+            Arrays.fill(memo[i], -1);
+        }
+        int maxProfit = 0;
+        maxProfit = dp(prices, 0,k);
+        return maxProfit;
+    }
+    private int dp(int[] prices, int start ,int k){//以start为买入点，收获的最大值
+        //basecase
+        if(start >= prices.length || k <= 0)//最后一天才买入股票，卖不出去了或者交易次数没有了 收益为0
+            return 0;
+        //备忘录
+        if(memo[start][k] != -1)
+            return memo[start][k];
+        int curMin = prices[start];//以当前start为买入点，维护本次交易的买入最小值，
+                               //为了动归计算本次卖出点收益最大值dp[i]=max(dp[i-1],prices[i] - cruMin)
+        int curMaxProfit = 0;
+        //选择
+        for (int sell = start + 1; sell <= prices.length - 1; sell++) {
+            //维护最小值
+            if(prices[sell] < curMin)
+                curMin = prices[sell];
+            curMaxProfit = Math.max(curMaxProfit, (prices[sell] - curMin) + dp(prices,sell + 1,k - 1));
+        }
+        return memo[start][k] = curMaxProfit;
+    }
+```
+
 
 ## 背景
 

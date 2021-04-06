@@ -27,7 +27,60 @@
 - [链表](./data_structure/linked_list.md)
 - [栈和队列](./data_structure/stack_queue.md)
 - [二进制](./data_structure/binary_op.md)
+- [图-拓扑排序]
+ > 拓扑排序：[207. 课程表(图的拓扑排序)](https://leetcode-cn.com/problems/course-schedule/solution/207-ke-cheng-biao-tu-de-tuo-bu-pai-xu-by-zgu9/)  
+ 判断一个有向图是否无环
+ ```java
+  public boolean canFinish(int numCourses, int[][] prerequisites) {
 
+        //拓扑排序：原理：使用邻节表结构，对一个图，将入度为0的点入队，
+        // 不断去除入度为0的顶点（去掉因果的'因'），出队时将邻接子节点的入度减1，在重复上过程将入度为0入队出队
+        //若全部都能去除，则图无环【去不掉则有环，环内不存在入度为0的顶点。】
+        //O(n+m)：n个节点，m条邻边
+
+        /*自己理解：使用队列来存入度为0的点，是为了抓住绳子的头部，顺藤摸瓜，避免每次都要全部遍历一遍找入度为0的点，再减子入度*/
+        
+        //邻接表抽象结构：[入度][数据]-->邻接链表
+        int[] indegrees = new int[numCourses];
+        List<List<Integer>> adjacency = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adjacency.add(new ArrayList<>());
+        }
+        //构图的邻接表
+        for (int[]cp :  prerequisites){
+            //添加邻接链表
+            adjacency.get(cp[1]).add(cp[0]);//因为课程[0,1]是先修1在0，后面那个是父 
+            //为邻接子节点入度+1
+            indegrees[cp[0]]++;
+        }
+        
+        //将图中入度为0的所有节点先入队【全部的根节点】
+        Deque<Integer> deque = new LinkedBlockingDeque<>();
+        for (int i = 0; i < indegrees.length; i++) {
+            if(indegrees[i] == 0){
+                deque.add(i);
+            }
+        }
+
+        while (!deque.isEmpty()){
+            int pre = deque.poll();
+            numCourses--;//去掉一个课程，看最后是否能去除完【无环】
+            //将将邻接子节点入度 减1，并把其中的入度为0的加入队列
+            for (int cur : adjacency.get(pre)) {
+                indegrees[cur]--;
+                if(indegrees[cur] == 0){
+                    deque.add(cur);
+                }
+            }
+        }
+        return numCourses == 0;
+    }
+ ```
+    
+    
+    
+    
+    
 ### 基础算法篇 🐮
 
 - [二分搜索](./basic_algorithm/binary_search.md)

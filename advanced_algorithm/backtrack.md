@@ -1,7 +1,7 @@
 # 回溯法
 
 ## 行：
->1.总结：做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件  
+>1.总结：做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件。
 >2. 回溯模板
 ```java
 	result = []
@@ -71,6 +71,46 @@ void backtrack(int[] nums, LinkedList<Integer> track) {
 > 4.回溯与递归、位运算解题比较：回溯的做选择和撤销选择，其实和题解中的用递归或位运算从1~n,每个元素加入或者不加入两种情况思路一样
 > 5.遇到重复子集问题(需要先排序，重复元素的一小段此时的顺序就是唯一的排列，避免重复)，为了消去重复的子集，需要先将选择列表进行排序，再在每一轮start选子集的时候，遇到相同和前一个的就跳过，
 [重复子集](https://leetcode-cn.com/problems/subsets-ii/)
+
+> 6. [22.括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+穷举所有可能，剪枝
+```java
+/*
+回溯法：
+    选择：当前字符选择左，还是右
+    剪枝：左括号<maxLen，右括号<左括号 才为当前有效字符串
+*/
+ List<String> result = new LinkedList<>();
+    int maxLen = 0;
+    public List<String> generateParenthesis(int n) {
+        maxLen = n;
+        recall(0 , 0, 0, new StringBuilder());
+        return result;
+    }
+    private void recall(int index , int leftCount, int rightCount, StringBuilder path){
+        //basecase
+        if(index == maxLen * 2){
+            if(leftCount == rightCount)
+                //加入这条路径
+                result.add(path.toString());
+            else
+                return;
+        }
+        //剪枝:左括号<maxLen，右括号<左括号 才为当前有效字符串
+        //选择:添加左
+        if(leftCount < maxLen){
+             path.append("(");
+            recall(index + 1 , leftCount + 1, rightCount,  path);
+            path.deleteCharAt(path.length() - 1);//回溯
+        }
+        //选择:添加右【利用必须leftCount > rightCount剪枝】
+        if(leftCount > rightCount){
+            path.append(")");
+            recall(index + 1 , leftCount , rightCount + 1,  path);
+            path.deleteCharAt(path.length() - 1);//回溯
+        }
+    }
+```
 
 
 ## 背景

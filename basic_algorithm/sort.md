@@ -15,52 +15,33 @@ void sort(int[] nums, int lo, int hi) {
     sort(nums, lo, p - 1);
     sort(nums, p + 1, hi);
 }
-//归并框架：后序遍历
-void sort(int[] nums, int lo, int hi) {
-    int mid = (lo + hi) / 2;
-    sort(nums, lo, mid);
-    sort(nums, mid + 1, hi);
 
-    /****** 后序遍历位置 ******/
-    // 合并两个排好序的子数组
-    merge(nums, lo, mid, hi);
-    /************************/
-}
 ```
 
+[快排](https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/solution/jian-zhi-offer-45-ba-shu-zu-pai-cheng-zu-4q3r/)
 ```java
 行
-/* 快速排序主函数 */
-void sort(int[] nums) {
-    // 一般要在这用洗牌算法将 nums 数组打乱，
-    // 以保证较高的效率，我们暂时省略这个细节
-    sort(nums, 0, nums.length - 1);
-}
-void quickSort(int[] nums, int low, int high){
-
-	if(low >= high)return;
-	int pivot = partition(nums,low,high);
-	quickSort(nums,low,pivot - 1);
-	quickSort(nums, pivot + 1, high);
-}
-int partition(int[] nums, int low, int high){//分区
-	int pivotKey = nums[low];
-	while(low < high){
-	    while (low < high && nums[high] >= pivotKey)
-		high--;
-	    swap(nums,low,high);//行：每次移动暂停切换时，都换交换一次，将pivotKey换到另一端，继而移动下一端
-
-	    while (low < high && nums[low] <= pivotKey)
-		low++;
-	    swap(nums,low,high);
-	}
-	return low;
-}
-void swap(int[] nums, int low, int high){
-	int temp = nums[low];
-	nums[low] = nums[high];
-	nums[high] = temp;
-}
+private void quickSort(String[] strs, int left , int right){
+        if(left >= right)
+            return;
+        int i = left;
+        int j = right;
+        String tmp = strs[left];//初始枢轴值
+        while(i < j){
+            //从后往前 大:j--
+            while(i < j && (j >= tmp) j--;//注：需要添加相等，否则全部一样ij不动 出不去大循环
+            //交换
+            strs[i] = strs[j];
+            //从前往后: 小:i++
+            while(i < j && (i <= tmp) i++;
+            //交换
+            strs[j] = strs[i];
+        }
+        //将轴值放到中间
+        strs[i] = tmp;
+        quickSort(strs, left , i - 1);
+        quickSort(strs, i + 1 , right);
+    }
 ```
 ```java
 行：快速选择算法(快排+二分查找结合)
@@ -131,6 +112,18 @@ func swap(nums []int, i, j int) {
 ### 归并排序
 > 数组版 归并  
 ```java
+//归并框架：后序遍历
+void sort(int[] nums, int lo, int hi) {
+    int mid = (lo + hi) / 2;
+    sort(nums, lo, mid);
+    sort(nums, mid + 1, hi);
+
+    /****** 后序遍历位置 ******/
+    // 合并两个排好序的子数组
+    merge(nums, lo, mid, hi);
+    /************************/
+}
+
     // 归并排序
     private static void merge_sort(int[] arr, int l, int r) {
         // 递归结束条件

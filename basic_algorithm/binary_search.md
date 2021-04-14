@@ -1,5 +1,6 @@
 # 二分搜索
 自我总结：二分搜索就是想方设法分成两个区间，然后进行选择收缩
+## 闭区间二分（适用于一定存在某个值）
 ## 我的疑问
 //行：我之前的疑惑，当二分搜索时，并没有找到就返回，而是全部搜索完，闭区间【right,left】退出循环，到底返回哪一边索引？
 总结出看当num[mid]等于中间值时，是哪一个边界在移动，那么返回的索引就为另一个不动的边界，因为跳出最后一个元素区间时，肯定时移动的那个元素再跳，为移动的那条边界为我们找的索引
@@ -100,7 +101,7 @@ int right_bound(int[] nums, int target) {
         return left;
     }
 ```
-## 二分搜索模板
+## （行：左开右开 二分，很好用，只需最后额外判断剩余的两元素）二分搜索模板
 
 给一个**有序数组**和目标值，找第一次/最后一次/任何一次出现的索引，如果没有出现返回-1
 模板四点要素
@@ -111,6 +112,54 @@ int right_bound(int[] nums, int target) {
 - 4、判断最后两个元素是否符合：A[start]、A[end] ? target
 
 时间复杂度 O(logn)，使用场景一般是有序数组的查找
+```java
+统计一个数字在排序数组中出现的次数。
+    //行：二分查找开区间(left,right)真好用，只用最后手动判断剩余的两个元素就行，闭区间的二分适用于一定存在某个元素，左闭右开的二分移动时有点迷
+    public int search(int[] nums, int target) {
+        if(nums.length <= 0)
+            return 0;
+
+        int leftIndex = 0;
+        int rightIndex = -1;
+        int left = 0;
+        int right = nums.length - 1;
+        //左边界
+        while(left + 1 < right){
+            int mid = (left + right) / 2;
+            if(nums[mid] < target){
+                left = mid;
+            }else if(nums[mid] > target){
+                right = mid;
+            }else if(nums[mid] == target)
+                right = mid;//保持左边界不动，右边界动
+        }
+        //左边界  (left,right)开区间需要手动判断
+        if(nums[left] == target)
+            leftIndex = left;
+        else if(nums[right] == target)
+            leftIndex = right;
+        //右边界
+        left = 0;
+        right = nums.length - 1;
+        while(left + 1 < right){
+            int mid = (left + right) / 2;
+            if(nums[mid] < target){
+                left = mid;
+            }else if(nums[mid] > target){
+                right = mid;
+            }else if(nums[mid] == target)
+                left = mid ;//保持右边界不动，左边界动
+        }
+
+        //右边界  (left,right)开区间需要手动判断
+        if(nums[right] == target)
+            rightIndex = right;
+        else if(nums[left] == target)
+            rightIndex = left;
+        return rightIndex - leftIndex >= 0 ? rightIndex - leftIndex + 1 : 0;
+    }
+```
+
 
 典型示例
 
@@ -178,6 +227,12 @@ func search(nums []int, target int) int {
     return -1
 }
 ```
+
+
+
+
+
+
 
 ## 常见题目
 

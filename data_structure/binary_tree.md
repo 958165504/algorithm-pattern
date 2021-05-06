@@ -280,6 +280,32 @@ func divideAndConquer(root *TreeNode) []int {
 > DFS 深度搜索（从上到下） 和分治法区别：前者一般将最终结果通过指针参数传入，后者一般递归返回结果最后合并
 
 #### BFS 层次遍历
+```java
+//行：层级遍历，如要统计二叉树的层数，需要一层一层的入队，就使用两个队列（一个装父亲，一个装儿子层），这样交替移动，保证是一层一层的入队出队
+public int maxDepth(TreeNode root) {
+        if(root == null) return 0;
+        List<TreeNode> queue = new LinkedList<>() {{ add(root); }}, tmp;
+        int res = 0;
+        while(!queue.isEmpty()) {
+            tmp = new LinkedList<>();
+            for(TreeNode node : queue) {
+                if(node.left != null) tmp.add(node.left);
+                if(node.right != null) tmp.add(node.right);
+            }
+            queue = tmp;
+            res++;
+        }
+        return res;
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-shu-de-shen-du-lcof/solution/mian-shi-ti-55-i-er-cha-shu-de-shen-du-xian-xu-bia/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```
+
+
 
 ```go
 func levelOrder(root *TreeNode) [][]int {

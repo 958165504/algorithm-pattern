@@ -113,6 +113,46 @@
             return left != null ? left : right;
         }
     }
+    
+    
+    //20210507 剑指offer
+    class Solution {
+	    // //从下往上，当左右子树找到或其中一点是自己，则该点就为公共祖先分叉点  
+	    // public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+	    //     isFind(root, p, q);
+	    //     return res;
+	    // }
+	    // static TreeNode res = null;
+	    // public boolean isFind(TreeNode root, TreeNode p, TreeNode q){
+	    //     if(root == null)
+	    //         return false;
+	    //     boolean left = isFind(root.left, p, q);
+	    //     boolean right = isFind(root.right, p, q);
+
+	    //     //隐掉这个就成功，我也不知道为啥
+	    //     if(/*res == null  && */((left && right) || (left || right) && (root.val == p.val || root.val == q.val))){
+	    //         res = root;
+	    //         return false;
+	    //     }
+	    //     return (left || right) || (root.val == p.val || root.val == q.val);
+	    // }
+
+
+	    ////题解很好的一个答案，相当于冒泡往上
+	    /*
+	    https://leetcode-cn.com/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/solution/mian-shi-ti-68-ii-er-cha-shu-de-zui-jin-gong-gon-7/
+	    */
+	    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+		if(root == null || root == p || root == q) return root;
+		TreeNode left = lowestCommonAncestor(root.left, p, q);
+		TreeNode right = lowestCommonAncestor(root.right, p, q);
+		if(left == null && right == null) return null; // 1.
+		if(left == null) return right; // 3.
+		if(right == null) return left; // 4.
+		return root; // 2. if(left != null and right != null)
+	    }
+
+	}
 ```
 
 ## 知识点

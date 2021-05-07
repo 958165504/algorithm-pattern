@@ -7,6 +7,13 @@
 >2 后序遍历，采用序列化二叉树来比较子树相等 [652. 寻找重复的子树](https://leetcode-cn.com/problems/find-duplicate-subtrees/)  
 >3.根据前序和中序序列，复原二叉树 [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)  
 ```java
+	根据一棵树的前序遍历与中序遍历构造二叉树。
+	注意:
+	你可以假设树中没有重复的元素。
+	例如，给出
+	前序遍历 preorder = [3,9,20,15,7]
+	中序遍历 inorder = [9,3,15,20,7]
+
 	/*
 	思路：由前序和后序序列来构造二叉树
 	1 前序遍历序列的首部为根节点

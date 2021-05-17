@@ -152,163 +152,56 @@ void sort(int[] nums, int lo, int hi) {
     }
 ```
 
-
-
-
-```go
-func MergeSort(nums []int) []int {
-    return mergeSort(nums)
-}
-func mergeSort(nums []int) []int {
-    if len(nums) <= 1 {
-        return nums
-    }
-    // 分治法：divide 分为两段
-    mid := len(nums) / 2
-    left := mergeSort(nums[:mid])
-    right := mergeSort(nums[mid:])
-    // 合并两段数据
-    result := merge(left, right)
-    return result
-}
-func merge(left, right []int) (result []int) {
-    // 两边数组合并游标
-    l := 0
-    r := 0
-    // 注意不能越界
-    for l < len(left) && r < len(right) {
-        // 谁小合并谁
-        if left[l] > right[r] {
-            result = append(result, right[r])
-            r++
-        } else {
-            result = append(result, left[l])
-            l++
-        }
-    }
-    // 剩余部分合并
-    result = append(result, left[l:]...)
-    result = append(result, right[r:]...)
-    return
-}
-```
-
 ### 堆排序
-
+[215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 #### 行：二叉堆 推排序思想
-
 >    构建初始堆，将待排序列构成一个大顶堆，升序大顶堆  
 >    将堆顶元素与堆尾元素交换，并断开(从待排序列中移除)堆尾元素。  
 >    重新构建堆。  
 >    重复2~3，直到待排序列中只剩下一个元素(堆顶元素)。  
 
-```java 
-//行：二叉堆(最大堆)的性质，每个结点比其子节点都大，因为为完全二叉树很容易找到父、左子、右子节点。用数组来存这个完全二叉树，arr[0]不用(如：2的父：2/2=1，索引1必须为根)
-// 父节点的索引
-int parent(int root) {
-    return root / 2;
-}
-// 左孩子的索引
-int left(int root) {
-    return root * 2;
-}
-// 右孩子的索引
-int right(int root) {
-    return root * 2 + 1;
-}
-```
 ```java
-//行：上浮函数
-private void swim(int k) {
-    // 如果浮到堆顶，就不能再上浮了
-    while (k > 1 && less(parent(k), k)) {
-        // 如果第 k 个元素比上层大
-        // 将 k 换上去
-        exch(parent(k), k);
-        k = parent(k);
+  /**
+     * 堆排序
+     */
+    public static void headSort(int[] nums) {
+        /**
+         * 大顶堆：arr[i] >= arr[2i+1] && arr[i] >= arr[2i+2]  
+         * 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2]  
+         */
+	 //构造初始堆,从第一个非叶子节点开始调整,左右孩子节点中较大的交换到父节点中
+        for (int i = (nums.length) / 2 - 1; i >= 0; i--) {
+            heapAdjust(nums, nums.length, i);
+        }
+        //排序，将最大的节点放在堆尾，然后从根节点重新调整
+        for (int i = nums.length - 1; i >= 1; i--) {
+            int temp = nums[0];
+            nums[0] = nums[i];
+            nums[i] = temp;
+            heapAdjust(nums, i, 0);
+        }
     }
-}
-```
-```java
-//下沉函数
-private void sink(int k) {
-    // 如果沉到堆底，就沉不下去了
-    while (left(k) <= N) {
-        // 先假设左边节点较大
-        int older = left(k);
-        // 如果右边节点存在，比一下大小
-        if (right(k) <= N && less(older, right(k)))
-            older = right(k);
-        // 结点 k 比俩孩子都大，就不必下沉了
-        if (less(older, k)) break;
-        // 否则，不符合最大堆的结构，下沉 k 结点
-        exch(k, older);
-        k = older;
+    public static void heapAdjust(int[] nums, int len, int i){
+        int k = i;
+        int temp = nums[i];
+        int index = 2 * k + 1;
+        while(index < len){
+            //找左右子节点较大的
+            if(index + 1 < len){
+                if(nums[index] < nums[index + 1])
+                    index = index + 1;
+            }
+            //判断父子大小，交换父节点与子节点
+            if(temp < nums[index]){//注意这儿是比较temp 不是nums[k]
+                nums[k] = nums[index];
+                k = index;
+                index = 2 * k + 1;
+            }else {
+                break;
+            }
+        }
+        nums[k] = temp;
     }
-}
-```
-
-用数组表示的完美二叉树 complete binary tree
-
-> 完美二叉树 VS 其他二叉树
-
-![image.png](https://img.fuiboom.com/img/tree_type.png)
-
-[动画展示](https://www.bilibili.com/video/av18980178/)
-
-![image.png](https://img.fuiboom.com/img/heap.png)
-
-核心代码
-
-```go
-package main
-
-func HeapSort(a []int) []int {
-    // 1、无序数组a
-	// 2、将无序数组a构建为一个大根堆【行：因为sink需要节点有左右子节点，因此构建时需要从完全二叉树的一个父节点开始下沉归位】
-	for i := len(a)/2 - 1; i >= 0; i-- {
-		sink(a, i, len(a))
-	}
-	// 3、交换a[0]和a[len(a)-1]
-	// 4、然后把前面这段数组继续下沉保持堆结构，如此循环即可
-	for i := len(a) - 1; i >= 1; i-- {
-		// 从后往前填充值
-		swap(a, 0, i)
-		// 前面的长度也减一
-		sink(a, 0, i)
-	}
-	return a
-}
-func sink(a []int, i int, length int) {
-	for {
-		// 左节点索引(从0开始，所以左节点为i*2+1)
-		l := i*2 + 1
-		// 有节点索引
-		r := i*2 + 2
-		// idx保存根、左、右三者之间较大值的索引
-		idx := i
-		// 存在左节点，左节点值较大，则取左节点
-		if l < length && a[l] > a[idx] {
-			idx = l
-		}
-		// 存在有节点，且值较大，取右节点
-		if r < length && a[r] > a[idx] {
-			idx = r
-		}
-		// 如果根节点较大，则不用下沉
-		if idx == i {
-			break
-		}
-		// 如果根节点较小，则交换值，并继续下沉
-		swap(a, i, idx)
-		// 继续下沉idx节点
-		i = idx
-	}
-}
-func swap(a []int, i, j int) {
-	a[i], a[j] = a[j], a[i]
-}
-
 ```
 
 ## 参考

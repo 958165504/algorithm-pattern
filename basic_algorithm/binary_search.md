@@ -65,44 +65,8 @@ int right_bound(int[] nums, int target) {
 }
 ```
 
-## hot100题
- /*二分：重要的是  如何找到二分区间的那个条件， 反正以闭区间为根本就行，来判断如何分割区间
-[287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
-```java
- /*二分：重要的是  如何找到二分区间的那个条件， 反正以闭区间为根本就行，来判断如何分割区间
-    至于本题 right = mid; 还是以闭区间为指导中心，当cnt > mid 重复元素位于区间 [left, mid]，因此收缩时 right = mid，当left==right时，就找到这个数了，跳出
-    和模板的left <= right不同，这个是搜索某个确定的值，
-    反正以闭区间为根本就行，来判断如何分割区间
-    */
-    public int findDuplicate(int[] nums) {
-        int len = nums.length;
-        int left = 1;
-        int right = len - 1;
-        while (left < right) {
-            int mid = left + (right -left) / 2;
-            int cnt = 0;
-            for (int num : nums) {
-                if (num <= mid) {
-                    cnt += 1;
-                }
-            }
-            //以 [2, 4, 5, 2, 3, 1, 6, 7] 为例, 区间 [1,7] 的中位数是 4
-            // 根据抽屉原理，小于等于 4 的个数如果严格大于 4 个
-            // 此时重复元素一定出现在 [1, 4] 区间里
-            if (cnt > mid) {
-                // 重复元素位于区间 [left, mid]
-                right = mid;
-            } else {
-                // if 分析正确了以后，else 搜索的区间就是 if 的反面
-                // [mid + 1, right]
-                left = mid + 1;
-            }
-        }
-        return left;
-    }
-```
-## （行：左开右开 二分，很好用，只需最后额外判断剩余的两元素）二分搜索模板
-
+## （行：左开右开 二分，很好用，只需最后额外判断剩余的两元素）二分搜索模板，
+大部分场景模板#3 都能解决问题，而且还能找第一次/最后一次出现的位置，应用更加广泛
 给一个**有序数组**和目标值，找第一次/最后一次/任何一次出现的索引，如果没有出现返回-1
 模板四点要素
 
@@ -118,37 +82,16 @@ int right_bound(int[] nums, int target) {
     public int search(int[] nums, int target) {
         if(nums.length <= 0)
             return 0;
-
-        int leftIndex = 0;
-        int rightIndex = -1;
-        int left = 0;
-        int right = nums.length - 1;
-        //左边界
-        while(left + 1 < right){
-            int mid = (left + right) / 2;
-            if(nums[mid] < target){
-                left = mid;
-            }else if(nums[mid] > target){
-                right = mid;
-            }else if(nums[mid] == target)
-                right = mid;//保持左边界不动，右边界动
-        }
-        //左边界  (left,right)开区间需要手动判断
-        if(nums[left] == target)
-            leftIndex = left;
-        else if(nums[right] == target)
-            leftIndex = right;
-        //右边界
         left = 0;
         right = nums.length - 1;
         while(left + 1 < right){
-            int mid = (left + right) / 2;
+            int mid = (left + right) / 2;//这儿left和right都直接等于Mid,因为left + 1 < right条件，不会存在左右都不动，死循环的情况
             if(nums[mid] < target){
                 left = mid;
             }else if(nums[mid] > target){
                 right = mid;
             }else if(nums[mid] == target)
-                left = mid ;//保持右边界不动，左边界动
+                left = mid ;
         }
 
         //右边界  (left,right)开区间需要手动判断
@@ -159,6 +102,36 @@ int right_bound(int[] nums, int target) {
         return rightIndex - leftIndex >= 0 ? rightIndex - leftIndex + 1 : 0;
     }
 ```
+
+### 对撞指针
+
+#### [剑指 Offer 57. 和为s的两个数字](https://leetcode-cn.com/problems/he-wei-sde-liang-ge-shu-zi-lcof/)
+> [两数之和]输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。  
+```java
+ public int[] twoSum(int[] nums, int target) {
+        /**
+         * 方法：对撞指针，由于序列不连续，不能使用二分,
+         * 只能左右向中间一步一步移动，不能跳一半
+         */
+        int[] res = new int[]{};
+        int l = 0;
+        int r = nums.length - 1;
+        while(l < r){
+            if(nums[l] + nums[r] == target){
+                res = new int[2];
+                res[0] = nums[l];
+                res[1] = nums[r];
+                return res;
+            }
+            else if(nums[l] + nums[r] > target)
+                r--;
+            else
+                l++;
+        }
+        return res;
+    }
+```
+
 
 
 典型示例

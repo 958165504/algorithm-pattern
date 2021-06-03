@@ -113,10 +113,6 @@ void sort(int[] nums, int lo, int hi) {
 ```
 
 ### 堆排序
-[215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)  
-
-取前k个最小值，构建k大小的大顶堆，然后将所有值一次与堆顶元素比较，更小则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最小的元素在堆中  
-取前k个最大值，构建k大小的小顶堆，然后将所有值一次与堆顶元素比较，更大则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最大的元素在堆中  
 
 #### 行：二叉堆 推排序思想
 >    构建初始堆，将待排序列构成一个大顶堆，升序大顶堆  
@@ -137,7 +133,7 @@ void sort(int[] nums, int lo, int hi) {
         for (int i = (nums.length) / 2 - 1; i >= 0; i--) {
             heapAdjust(nums, nums.length, i);
         }
-        //排序，将最大的节点放在堆尾，然后从根节点重新调整
+        //排序，将最大的节点放在堆尾，然后从根节点重新调整【这儿也可以移除前K个最大值，取前K个最大值，不用全部元素排序】
         for (int i = nums.length - 1; i >= 1; i--) {
             int temp = nums[0];
             nums[0] = nums[i];
@@ -167,6 +163,39 @@ void sort(int[] nums, int lo, int hi) {
         nums[k] = temp;
     }
 ```
+
+[215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)  
+
+- 取前k个最小值，构建k大小的大顶堆，然后将所有值一次与堆顶元素比较，更小则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最小的元素在堆中  
+
+- 取前k个最大值，构建k大小的小顶堆，然后将所有值一次与堆顶元素比较，更大则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最大的元素在堆中  
+```java
+    public int findKthLargest(int[] nums, int k) {
+        // java优先队列默认就是优先取到小的元素，即小顶堆
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(new Comparator<Integer>() {
+            public int compare(Integer a, Integer b) {
+                return a - b; // 小顶堆
+            }
+        });
+
+        // 遍历数组，放入小顶堆，堆达到k个则判断 当前值大于是否大于堆顶元素，是的话则删除堆顶元素，然后当前值入堆
+        for (int num : nums) {
+            if (queue.size() != k) {
+                queue.add(num);
+            } else {
+                if (num > queue.peek()) {
+                    queue.poll();
+                    queue.add(num);
+                }
+            }
+        }
+
+        return queue.peek();
+    }
+```
+
+
+
 
 ## 参考
 

@@ -167,8 +167,9 @@ void sort(int[] nums, int lo, int hi) {
 [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)  
 
 - 取前k个最小值，构建k大小的大顶堆，然后将所有值一次与堆顶元素比较，更小则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最小的元素在堆中  
-
+> PriorityQueue<Integer> B = new PriorityQueue<>((x, y) -> (y - x)); // 大顶堆
 - 取前k个最大值，构建k大小的小顶堆，然后将所有值一次与堆顶元素比较，更大则取代【我的位置，给我出来，相当于堆是一个暂时的缓存】，直到最后剩k个最大的元素在堆中  
+> PriorityQueue<Integer> A = new PriorityQueue<>(); // 小顶堆【默认为小顶堆】
 ```java
     public int findKthLargest(int[] nums, int k) {
         // java优先队列默认就是优先取到小的元素，即小顶堆

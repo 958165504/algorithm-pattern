@@ -32,6 +32,55 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 ### > 4)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
 [labuladong 经动态规划：编辑距离 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484731&idx=3&sn=aa642cbf670feee73e20428775dff0b5&chksm=9bd7fb33aca0722568ab71ead8d23e3a9422515800f0587ff7c6ef93ad45b91b9e9920d8728e&scene=21#wechat_redirect)  
 [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  
+```java
+/**题目
+> 题目：给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。  
+> 你可以对一个单词进行如下三种操作：  
+>   插入一个字符  
+>   删除一个字符  
+>   替换一个字符  
+*/
+
+/**思路
+ *  选择
+     *      if(s[i] == s[j]) dp[i,j] = dp[i - 1, j -1] ,直接跳过
+     *      if(s[i] != s[j])
+     *          dp[i , j] = dp[i, j - 1] + 1  //插入
+     *          dp[i , j] = dp[i - 1, j] + 1  //删除
+     *          dp[i , j] = dp[i - 1, j - 1] + 1  //改
+*/
+
+//二刷：20210607
+    public int minDistance(String word1, String word2) {
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        //basecase
+        //第一列
+        for (int i = 1; i < dp.length; i++) {
+            dp[i][0] = dp[i - 1][0] + 1;
+        }
+        //第一行
+        for (int i = 1; i < dp[0].length; i++) {
+            dp[0][i] = dp[0][i - 1] + 1;
+        }
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if(word1.charAt(i - 1) == word2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1];
+                else {
+                    //增加
+                    int tmp1= dp[i][j - 1] + 1;
+                    //删除
+                    int tmp2 = dp[i - 1][j] + 1;
+                    //修改
+                    int tmp3 = dp[i - 1][j - 1] + 1;
+                    dp[i][j] = Math.min(Math.min(tmp1,tmp2),tmp3);
+                }
+            }
+        }
+        return dp[dp.length - 1][dp[0].length - 1];
+    }
+```
+
 
 ### > 5）最长递增子序列 ： 已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
 ![image](https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4kgXtfMiaNRfjKJK5DiaHNAiaEckTjx0BjeFdSIXalPct8LfFicaGnZyaRCK0H0HYNF6nAfZHblloRu4w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)  

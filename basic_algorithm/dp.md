@@ -82,7 +82,39 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 ```
 
 
-### > 5）最长递增子序列 ： 已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
+### > 5）最长递增子序列 ： 
+[300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)    
+已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
+```java
+/**题目
+给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+*/
+
+/**思路
+二刷：20210608
+状态i
+dp[i]:以i为结尾的子序列长度最大值
+选择：回溯i， for j=0;j<i;j++  当i>j dp[i] = max(dp[i], dp[j]+1),得出该区间最大长度
+用记忆化搜索也行，递归相等于去掉最外层的那个fori
+ */
+    public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        //basecase
+        Arrays.fill(dp,1);
+        int maxLen = dp[0];
+        //选择
+        for(int i = 0; i < nums.length; i++){
+            for(int j = 0; j < i; j++){
+                if(nums[i] > nums[j]){
+                     dp[i] = Math.max(dp[i],dp[j] + 1);
+                }
+            }
+            maxLen = Math.max(dp[i],maxLen);//注：需要回溯完整个j,在得出最大值
+        }
+        return maxLen;
+    }
+```
 ![image](https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4kgXtfMiaNRfjKJK5DiaHNAiaEckTjx0BjeFdSIXalPct8LfFicaGnZyaRCK0H0HYNF6nAfZHblloRu4w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)  
 
 ### > 6)最长递增子序列之信封嵌套问题 

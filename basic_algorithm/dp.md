@@ -115,8 +115,6 @@ dp[i]:以i为结尾的子序列长度最大值
         return maxLen;
     }
 ```
-![image](https://mmbiz.qpic.cn/mmbiz_png/map09icNxZ4kgXtfMiaNRfjKJK5DiaHNAiaEckTjx0BjeFdSIXalPct8LfFicaGnZyaRCK0H0HYNF6nAfZHblloRu4w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)  
-
 ### > 6)最长递增子序列之信封嵌套问题 
 ```java
 先对宽度w进行升序排序，如果遇到w相同的情况，则按照高度h降序排序。之后把所有的h作为一个数组，在这个数组上计算 LIS 的长度就是答案。  

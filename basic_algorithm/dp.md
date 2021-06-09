@@ -116,9 +116,42 @@ dp[i]:以i为结尾的子序列长度最大值
     }
 ```
 ### > 6)最长递增子序列之信封嵌套问题 
+[354. 俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)    
 ```java
-先对宽度w进行升序排序，如果遇到w相同的情况，则按照高度h降序排序。之后把所有的h作为一个数组，在这个数组上计算 LIS 的长度就是答案。  
-对h降序原因：对于宽度w相同的数对，要对其高度h进行降序排序。因为两个宽度相同的信封不能相互包含的，而逆序排序保证在w相同的数对中最多只选取一个计入 LIS。  
+/**题目
+给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
+当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面）。
+*/
+/**思路：
+  先排序使得先根据宽w升序，h再降序，在根据h序列找最长递增序列
+对h降序原因：对于宽度w相同的数对，要对其高度h进行降序排序。因为两个宽度相同的信封不能相互包含的，而逆序排序保证在w相同的数对中最多只选取一个计入 LIS，因此选最大的h放前面。  
+*/
+
+ public int maxEnvelopes(int[][] envelopes) {
+        //先排序使得先根据宽w升序，h再降序，在根据h序列找最长递增序列
+        Arrays.sort(envelopes, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] == o2[0] ? o2[1] - o1[1] : o1[0] - o2[0];
+            }
+        });
+
+        //动态规划找h的最大递增序列
+        int[] dp = new int[envelopes.length];
+        //basecase
+        Arrays.fill(dp,1);
+        int maxRes = 0;
+        for (int i = 0; i < dp.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if(envelopes[i][1] > envelopes[j][1]){
+                    dp[i] = Math.max(dp[i],dp[j] + 1);
+                }
+            }
+            maxRes = Math.max(dp[i],maxRes);
+        }
+        return maxRes;
+    }
 ```
 ### > 7) 子序列解题模板：最长回文子序列 【子序列问题是，对ij比较，相等则一起移动，不相等则看删除i还j】
 ```java

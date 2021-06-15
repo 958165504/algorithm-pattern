@@ -1,8 +1,9 @@
 # 回溯法
 
 ## 行：
->1.总结：做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件。
->2. 回溯模板
+### >1.总结：
+做回溯题，画树，兄弟节点(回溯每一层，当不满足时就剪枝 continue))每一个分支表示一个解，可以根据分支结束来写回溯的结束条件。
+### >2. 回溯模板
 ```java
 	result = []
 	def backtrack(路径, 选择列表):
@@ -15,9 +16,18 @@
 		backtrack(路径, 选择列表)
 		撤销选择
 ```
->3.子集、组合、排列的模板
+### >3.子集、组合、排列的模板
 
+#### 子集
+![图片](https://user-images.githubusercontent.com/73264826/121987265-bd6c2080-cdca-11eb-9d7f-8b917c105d33.png)
 ```java
+/**题目
+问题很简单，输入一个不包含重复数字的数组，要求算法输出这些数字的所有子集。
+*/
+/**思路
+话树，且使用前序遍历，保存树的所有节点为子集，(要用一个 start 排除已经选择过的数字。)
+*/
+
 //子集 (要用一个 start 排除已经选择过的数字。)
 void backtrack(vector<int>& nums, int start, vector<int>& track) {
     res.push_back(track);
@@ -30,6 +40,20 @@ void backtrack(vector<int>& nums, int start, vector<int>& track) {
         track.pop_back();
     }
 }
+
+```
+
+#### 组合
+![图片](https://user-images.githubusercontent.com/73264826/121987754-ada10c00-cdcb-11eb-9034-488f0c67cb59.png)
+
+```java
+/**题目：输入两个数字 n, k，算法输出 [1..n] 中 k 个数字的所有组合。
+*/
+/**思路：
+画树，树的叶子节点为解
+k 限制了树的高度，n 限制了树的宽度(要用一个 start 排除已经选择过的数字。)
+*/
+
 //组合：k 限制了树的高度，n 限制了树的宽度(要用一个 start 排除已经选择过的数字。)
 void backtrack(int n, int k, int start, vector<int>& track) {
     // 到达树的底部
@@ -46,7 +70,18 @@ void backtrack(int n, int k, int start, vector<int>& track) {
         track.pop_back();
     }
 }
-//排列 (contains 方法排除已经选择的数字)
+```
+#### 排列
+![图片](https://user-images.githubusercontent.com/73264826/121988146-66674b00-cdcc-11eb-97ad-a91c6212b2fe.png)
+
+```java
+/**题目：输入一个不包含重复数字的数组 nums，返回这些数字的全部排列。
+*/
+/**思路：一般做题穷举最常见的模板，选择是随机的，使用vistied[i]保存选择的，在一堆苹果里面每个随机选择拿一个，标记vistied，再拿剩下的，直到拿完位置。
+叶子节点就是解
+*/
+
+//排列 (contains【也是vistied】 方法排除已经选择的数字)
 void backtrack(int[] nums, LinkedList<Integer> track) {
     // 触发结束条件
     if (track.size() == nums.length) {
@@ -66,14 +101,21 @@ void backtrack(int[] nums, LinkedList<Integer> track) {
         track.removeLast();
     }
 }
-记住这几种树的形状，就足以应对大部分回溯算法问题了，无非就是 start 或者 contains 剪枝，也没啥别的技巧了。
+记住这几种树的形状，就足以应对大部分回溯算法问题了，无非就是 start【子集和组合，选择是有先后顺序】 或者 contains【排列，选择是随机选，没有先后】 剪枝，也没啥别的技巧了。
 ```
-> 4.回溯与递归、位运算解题比较：回溯的做选择和撤销选择，其实和题解中的用递归或位运算从1~n,每个元素加入或者不加入两种情况思路一样
-> 5.遇到重复子集问题(需要先排序，重复元素的一小段此时的顺序就是唯一的排列，避免重复)，为了消去重复的子集，需要先将选择列表进行排序，再在每一轮start选子集的时候，遇到相同和前一个的就跳过，
-[重复子集](https://leetcode-cn.com/problems/subsets-ii/)
+##### 20210615 中兴提前批笔试题，【回溯 排列做】
+问题：选择列表【int i = 0,每种技能的伤害】， 每种技能当妖怪的血量小于多少，会伤害双倍【不要被额外的条件吓住，就是在每次选择技能时，再判断该技能是否能造成双倍而已，只是再多了两种分支判断选择而已】， 使用vist[i]保存当前随机选择的i，再往下递归继续选剩下的技能，直到妖怪的血量为0    
+思路：其实就是画一个树，先选哪个技能，其子节点再往下选剩余技能，叶子节点【打死妖怪】就是选择的可行解    
 
-> 6. [22.括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
-穷举所有可能，剪枝
+
+### > 4.回溯与递归、位运算解题比较：
+回溯的做选择和撤销选择，其实和题解中的用递归或位运算从1~n,每个元素加入或者不加入两种情况思路一样  
+### > 5.遇到重复子集问题
+(需要先排序，重复元素的一小段此时的顺序就是唯一的排列，避免重复)，为了消去重复的子集，需要先将选择列表进行排序，再在每一轮start选子集的时候，遇到相同和前一个的就跳过，  
+[重复子集](https://leetcode-cn.com/problems/subsets-ii/)  
+
+### > 6. [22.括号生成](https://leetcode-cn.com/problems/generate-parentheses/)  
+穷举所有可能，剪枝  
 ```java
 /*
 回溯法：

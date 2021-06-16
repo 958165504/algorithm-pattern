@@ -29,7 +29,7 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 
 # 二、子序列类型问题
 
-### > 4)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
+### > 1)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
 [labuladong 经动态规划：编辑距离 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484731&idx=3&sn=aa642cbf670feee73e20428775dff0b5&chksm=9bd7fb33aca0722568ab71ead8d23e3a9422515800f0587ff7c6ef93ad45b91b9e9920d8728e&scene=21#wechat_redirect)  
 [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  
 ```java
@@ -82,7 +82,7 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 ```
 
 
-### > 5）最长递增子序列 ： 
+### > 2）最长递增子序列 ： 
 [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)    
 已知dp[1....4]， 求dp[5]。 nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。需要将nums[5]回溯 从头开始找比其小的dp值，重新组成最长序列的最大长度。  
 ```java
@@ -115,7 +115,7 @@ dp[i]:以i为结尾的子序列长度最大值
         return maxLen;
     }
 ```
-### > 6)最长递增子序列之信封嵌套问题 
+### > 3)最长递增子序列之信封嵌套问题 
 [354. 俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)    
 ```java
 /**题目
@@ -153,7 +153,7 @@ dp[i]:以i为结尾的子序列长度最大值
         return maxRes;
     }
 ```
-### > 7) 子序列解题模板：最长回文子序列 【子序列问题是，对ij比较，相等则一起移动，不相等则看删除i还j】
+### > 4) 子序列解题模板：最长回文子序列 【子序列问题是，对ij比较，相等则一起移动，不相等则看删除i还j】
 ```java
 1、第一种思路模板是一个一维的 dp 数组：
 int n = array.length;
@@ -208,7 +208,31 @@ for (int i = 0; i < n; i++) {
         return dp[0][n - 1];
     }
 ```
+# 三、子串问题
+>子串的问题，都是连续的，因此基本都是以i为结尾，只用看dp[i-1]推导出dp[i],而子序列不是连续的，因此需要遍历0-i-1来推导出dp[i]  
 
+### > 1) 53. 最大子序和：  
+[53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray//)  
+```java
+/**题目：给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+*/
+
+/**思路：
+思路：这种连续子串的动态规划，一般都是以i为结尾，只用看前面i-1的情况，子序列问题，就需要看0-i-1 来得出i
+*/
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        for(int i = 0; i < nums.length; i++){
+            dp[i] = nums[i];
+        }
+        int res = dp[0];
+        for(int i = 1; i < nums.length; i++){
+            dp[i] = dp[i - 1] > 0 ? dp[i - 1] + dp[i]:dp[i];
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+```
 
 ### > 7) 回文子串解题思路：利用判断【i，j】区间是否为回文动态规划解法为基础来变形
 > 总结：关于回文的，都可以基于判断【i，j】区间是否为回文动态规划解法为基础，来进行穷举所有区间判断，来变相解题  

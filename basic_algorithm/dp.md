@@ -28,6 +28,10 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 [labuladong 动态规划答疑篇 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484832&idx=1&sn=44ad2505ac5c276bf36eea1c503b78c3&chksm=9bd7fba8aca072be32f66e6c39d76ef4e91bdbf4ef993014d4fee82896687ad61da4f4fc4eda&scene=21#wechat_redirect)  
 
 # 二、子序列类型问题
+> 总结:两子序列问题：
+子序列的动态规划：都是以ij结尾，当i==j，直接向前，当不相等，看删除i还是j【由于序列可以不连续，因此考虑删i或j】	  	
+如：1）编辑距离：考虑word1转换未word2,当i!=j，考虑删除i,增加i，替换i等操作。		  
+    2）最长公共子序列：i!=j时，考虑删除ih或者j		  
 
 ### > 1)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
 [labuladong 经动态规划：编辑距离 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484731&idx=3&sn=aa642cbf670feee73e20428775dff0b5&chksm=9bd7fb33aca0722568ab71ead8d23e3a9422515800f0587ff7c6ef93ad45b91b9e9920d8728e&scene=21#wechat_redirect)  
@@ -153,6 +157,53 @@ dp[i]:以i为结尾的子序列长度最大值
         return maxRes;
     }
 ```
+### >4) 最长公共子序列
+```java
+/*题目:给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+*/
+/*思路：
+1.dp[i][j]定义：以ij为结尾的两字符串的最长公共子序列  
+2.basecase:第一行第一列全为0，初始化数组已经为0，不用赋初值了
+3.选择
+        /**
+        1.当i==j,一起前进
+        2.当i!=j,考虑删除i或者j,取两种情况所得最长公共的最大值
+         */
+	 
+总结两子序列问题：子序列的动态规划：都是以ij结尾，当i==j，直接向前，当不相等，看删除i还是j【由于序列可以不连续，因此考虑删i或j】
+如：编辑距离：考虑word1转换未word2,当i!=j，考虑删除i,增加i，替换i等操作。
+   最长公共子序列：i!=j时，考虑删除ih或者j
+*/
+
+
+
+  public int  longestCommonSubsequence(String text1, String text2) {
+        //定义以ij为结尾的两字符串的最长公共子序列  
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        //basecase:第一行第一列全为0，初始化数组已经为0，不用赋初值了
+
+        //选择
+        /**
+        1.当i==j,一起前进
+        2.当i!=j,考虑删除i或者j,取两种情况所得最长公共的最大值
+         */
+        for(int i = 1; i <= text1.length(); i++){
+            for(int j = 1; j <= text2.length(); j++){
+                if(text1.charAt(i - 1) == text2.charAt(j - 1)){
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }else{
+                    int temp1 =  dp[i][j - 1];//删i
+                    int temp2 =  dp[i - 1][j];//删j
+                    dp[i][j] = Math.max(temp1,temp2);
+                }
+            }
+        }
+        return dp[text1.length()][text2.length()];
+    }
+```
+
+
 ### > 4) 子序列解题模板：最长回文子序列 【子序列问题是，对ij比较，相等则一起移动，不相等则看删除i还j】
 ```java
 1、第一种思路模板是一个一维的 dp 数组：
@@ -208,6 +259,10 @@ for (int i = 0; i < n; i++) {
         return dp[0][n - 1];
     }
 ```
+
+
+
+
 # 三、子串问题
 >子串的问题，都是连续的，因此基本都是以i为结尾，只用看dp[i-1]推导出dp[i],而子序列不是连续的，因此需要遍历0-i-1来推导出dp[i]  
 

@@ -28,10 +28,11 @@ d.最后明确 base case，显然目标金额为 0 时，所需硬币数量为 0
 [labuladong 动态规划答疑篇 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484832&idx=1&sn=44ad2505ac5c276bf36eea1c503b78c3&chksm=9bd7fba8aca072be32f66e6c39d76ef4e91bdbf4ef993014d4fee82896687ad61da4f4fc4eda&scene=21#wechat_redirect)  
 
 # 二、子序列类型问题
-> 总结:两子序列问题：
-子序列的动态规划：都是以ij结尾，当i==j，直接向前，当不相等，看删除i还是j【由于序列可以不连续，因此考虑删i或j】	  	
-如：1）编辑距离：考虑word1转换未word2,当i!=j，考虑删除i,增加i，替换i等操作。		  
-    2）最长公共子序列：i!=j时，考虑删除ih或者j		  
+> 总结:两子序列问题：  
+
+子序列的动态规划：都是以ij结尾，当i==j，直接向前，当不相等，看删除i还是j【由于序列可以不连续，因此考虑删i或j】  
+如：1）编辑距离：考虑word1转换未word2,当i!=j，考虑删除i,增加i，替换i等操作。  
+    2）最长公共子序列：i!=j时，考虑删除ih或者j  
 
 ### > 1)编辑距离： 解决两个字符串的动态规划问题 ，一般都是用**两个指针i,j分别指向两个字符串的最后，然后一步步往前走**，缩小问题的规模。
 [labuladong 经动态规划：编辑距离 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484731&idx=3&sn=aa642cbf670feee73e20428775dff0b5&chksm=9bd7fb33aca0722568ab71ead8d23e3a9422515800f0587ff7c6ef93ad45b91b9e9920d8728e&scene=21#wechat_redirect)  

@@ -231,38 +231,40 @@ for (int i = 0; i < n; i++) {
 这种思路运用相对更多一些，尤其是涉及两个字符串/数组的子序列。本思路中 dp 数组含义又分为「只涉及一个字符串」和「涉及两个字符串」两种情况。  
 ```
 [516. 最长回文子序列（动态规划）](https://leetcode-cn.com/problems/longest-palindromic-subsequence/solution/516-zui-chang-hui-wen-zi-xu-lie-dong-tai-sily/)  
-注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描  
-```java
-    public int longestPalindromeSubseq(String s) {
-        int n = s.length();
-        int [][] dp = new int[n][n];
-        /*
-        * 动态规划
-        * dp[i][j]定义，索引i j之间的最长回文子序列的最大长度
-        * 选择：当字符i , j 相等 dp[i][j] = dp[i+1][j-1] + 2;
-        *                  不相等 dp[i][j] = max(dp[i][j-1], dp[i+1][j])//当ij不等，分别舍弃j，i加入之前的子串，看求这两种情况的最大值
-        * basecase: 当下标i==j，一个字符串时,回文长度为1
-        */
+注：找到状态转移和 base case 之后，一定要观察 DP table，看看怎么遍历才能保证通过已计算出来的结果解决新的问题【比如本题的 从底往上计算扫描】  
 
+```java
+ public int longestPalindromeSubseq(String s) {
+ 
+ 	/**题目：给定一个字符串 s ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 s 的最大长度为 1000*/
+	
+        /*
+        思路：
+        通过ij，分割成所有子区间[i,j]
+        然后判断子区间的最大回文数
+            i==j,dp[i][j] = dp[i+1][j-1]+2
+            i!=j,考虑删除i还是j，取最大值。dp[i][j]=max(dp[i][j-1],dp[i+1][j])
+        最后返回dp[0][n-1],[0,n-1]最大区间的最大回文数
+         */
+        int[][]dp = new int[s.length()][s.length()];
+        int n = s.length();
         //basecase
-        for (int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++){
             dp[i][i] = 1;
         }
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i + 1; j <= n - 1 ; j++) {
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = i + 1;j <= n - 1; j ++){
                 if(s.charAt(i) == s.charAt(j)){
-                    dp[i][j] = dp[i+1][j-1] + 2;
-                }else {
-                    dp[i][j] = Math.max(dp[i][j-1], dp[i+1][j]);
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                }else{
+                    //删i还是j
+                    dp[i][j] = Math.max(dp[i + 1][j],dp[i][j - 1]);
                 }
             }
         }
         return dp[0][n - 1];
     }
 ```
-
-
-
 
 # 三、子串问题
 >子串的问题，都是连续的，因此基本都是以i为结尾，只用看dp[i-1]推导出dp[i],而子序列不是连续的，因此需要遍历0-i-1来推导出dp[i]  

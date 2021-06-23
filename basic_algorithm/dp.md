@@ -408,7 +408,39 @@ int knapsack(int W, int N, vector<int>& wt, vector<int>& val) {
         return dp[len - 1][target];
     }
 ```
+### > 2)完全背包问题
+```java
+/*题目：给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。
+请你计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。
+假设每一种面额的硬币有无限个。 
+*/
+/*思路：
+前i个物品装满j的方法数 = 第i物品 选 + 不选的方法数
+比如：你想用面值为 2 的硬币【当前i】凑出金额 5【当前j】，那么如果你知道了凑出金额 3 的方法【dp[i][j - conis[i]]】，再加上一枚面额为 2 的硬币，不就可以凑出 5 了嘛
+dp[i][j] = dp[i][j] = dp[i -1][j]  
+		+ dp[i][j - coins[i - 1]];//注：这儿是可重复性的物品，因此选择i,i仍然不动，不为i-1,这是完全背包与01背包的区别
 
+*/
+    public int change(int amount, int[] coins) {
+        int[][] dp = new int[coins.length + 1][amount + 1];//前i个货币能装满amount的数量
+        //basecase
+        for(int i = 0; i <= coins.length; i++){
+            dp[i][0] = 1;
+        }
+        for(int i = 1; i <= coins.length; i++){
+            for(int j = 1; j <= amount; j++){
+                if(j - coins[i - 1] < 0){
+                    dp[i][j] = dp[i - 1][j];//不选
+                }else{
+                    //选和不选两种方法相加的数量就是总的方法数
+                    dp[i][j] = dp[i -1][j] 
+                    + dp[i][j - coins[i - 1]];//注：这儿是可重复性的物品，因此选择i,i仍然不动，不为i-1,这是完全背包与01背包的区别
+                }
+            }
+        }
+        return  dp[coins.length][amount];
+    }
+```
 
 
 # 四、贪心类型

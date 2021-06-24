@@ -563,6 +563,49 @@ public int coinChange(int[] coins, int amount) {
         return intervals.length - noIntersectCont;//需要去掉最少的空间
     }
 ```
+[452. 用最少数量的箭引爆气球 | 也是最多不重叠区间数问题【区间调度】】](https://leetcode-cn.com/problems/minimum-number-of-arrows-to-burst-balloons/)  
+```java
+/*题目：一支弓箭可以沿着 x 轴从不同点完全垂直地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满足  xstart ≤ x ≤ xend，则该气球会被引爆。可以射出的弓箭的数量没有限制。 弓箭一旦被射出之后，可以无限地前进。我们想找到使得所有气球全部被引爆，所需的弓箭的最小数量。
+给你一个数组 points ，其中 points [i] = [xstart,xend] ，返回引爆所有气球所必须射出的最小弓箭数。
+*/
+/*思路：
+
+        * 贪心算法： 本题和区间调度问题一模一样，可转换为求最多的不重叠区间，即最少的箭矢
+        * 先排序,从低往上，取end1 < start2【和区间调度算法相比，<= 变为< ，就算按着气球 也能引爆】
+        *                   是：则收下这个区间，取end2为末尾依次递进
+        *                   不是：则比较下一个区间 end1 < start3
+        * 
+*/
+
+    public int findMinArrowShots(int[][] points) {
+        /*
+        * 贪心算法： 本题和区间调度问题一模一样，可转换为求最多的不重叠区间，即最少的箭矢
+        * 先排序,从低往上，取end1 < start2【和区间调度算法相比，<= 变为< ，就算按着气球 也能引爆】
+        *                   是：则收下这个区间，取end2为末尾依次递进
+        *                   不是：则比较下一个区间 end1 < start3
+        * 
+        * */
+        if(points.length <= 0)
+            return 0;
+        Arrays.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                ////return o1[1] - o2[1];//以后排序不要用减法，因为-2147483645 - 2147483646 造成int溢出 变成正数
+                return o1[1] < o2[1]? -1 : 1;
+            }
+        });
+        int noIntersectCont = 1;//不相交数至少为1
+        int end = points[0][1];
+        for (int i = 1; i < points.length; i++) {
+            if(end < points[i][0]){//当不重叠的区间，更新下一个区间的end，去除与end相交的区间，直至区间列表为空
+                noIntersectCont++;
+                //更新末尾end
+                end = points[i][1];
+            }
+        }
+        return noIntersectCont;//需要多少只箭矢，就是多少个不重叠的区间
+    }
+```
 
 
 # 五、其他经典类型

@@ -409,6 +409,7 @@ int knapsack(int W, int N, vector<int>& wt, vector<int>& val) {
     }
 ```
 ### > 2)完全背包问题
+[518. 零钱兑换 II](https://leetcode-cn.com/problems/partition-equal-subset-sum/)  
 ```java
 /*题目：给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。
 请你计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。
@@ -439,6 +440,33 @@ dp[i][j] = dp[i][j] = dp[i -1][j]
             }
         }
         return  dp[coins.length][amount];
+    }
+```
+[322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)  
+```java
+/*题目：给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+你可以认为每种硬币的数量是无限的。
+*/
+/*思路
+状态：变量 amount
+    选择：遍历coins
+    dp[n] :n元时最少的张数凑齐
+    base：amout为0时，只需要0张纸币
+*/
+public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp,amount + 1);//先赋初值，为最大值，全部由1组成，之后为了比较装入最小值
+        dp[0] = 0;//base
+        //遍历状态1的所有取值
+        for (int i = 1; i <= amount; i++) {
+            for (int j = 0; j < coins.length; j++) {
+                if(i - coins[j] < 0)
+                    continue;
+                //选择最小的：选择还是不选择i
+                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+            }
+        }
+        return dp[amount] == amount + 1? -1 : dp[amount];
     }
 ```
 

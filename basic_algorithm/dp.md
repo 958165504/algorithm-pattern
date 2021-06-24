@@ -605,9 +605,32 @@ public int coinChange(int[] coins, int amount) {
         }
         return noIntersectCont;//需要多少只箭矢，就是多少个不重叠的区间
     }
+    
+    
+[55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)  
+```java
+/*题目：给定一个非负整数数组 nums ，你最初位于数组的 第一个下标 。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+判断你是否能够到达最后一个下标。
+*/
+//二刷：20210624 贪心算法
+/*思路：攻城掠地：根据每个炮兵的炮程向前一步一步推进，并实时更远最远的边疆，看是否能到达末尾，若炮兵位置都超出最远边界了，则不能达到末尾 */
+     public boolean canJump(int[] nums) {
+        int longest = nums[0];//维护一个最长的距离变量
+        //遍历每个点，更新最远距离，若最远距离能到达末尾，则可以跳
+        for(int i = 0; i < nums.length; i++){
+            if(i > longest){//若i都追上longest，则不能到达末尾
+                return false;
+            }
+            if(i + nums[i] > longest){
+                longest = i + nums[i];
+            }
+            if(longest >= nums.length - 1)
+                return true;
+        }
+        return false;
+     }
 ```
-
-
 # 五、其他经典类型
 ### > 10) 打家劫舍
 [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  

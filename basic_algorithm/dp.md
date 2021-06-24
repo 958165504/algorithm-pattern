@@ -455,7 +455,7 @@ dp[i][j] = dp[i][j] = dp[i -1][j]
 */
 public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
-        Arrays.fill(dp,amount + 1);//先赋初值，为最大值，全部由1组成，之后为了比较装入最小值
+        Arrays.fill(dp,amount + 1);//先赋初值，为最大值，全由1组成且+1不能的个数，之后为了比较装入最小值
         dp[0] = 0;//base
         //遍历状态1的所有取值
         for (int i = 1; i <= amount; i++) {
@@ -469,6 +469,45 @@ public int coinChange(int[] coins, int amount) {
         return dp[amount] == amount + 1? -1 : dp[amount];
     }
 ```
+```java
+/*题目：给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。。*/
+/*
+思路：转换为零钱兑换1问题，从选择列表钱种类中【无限个】，凑齐n的最小个数
+*/
+    //二刷：20210624【完全背包问题】零钱兑换1
+    public int numSquares(int n) {
+        /*
+        dp[n] = min( dp[n],dp[n - list(i)] + 1)//组成n的最小个数，选还是不选i两种方案最小值
+        状态n
+        选择：每个i选还是不选两种方案的最小值
+         */
+        //构造选择列表
+        int maxSquareNum = (int) (Math.sqrt(n)) + 1;//考虑到根号为小数情况
+        int[] list = new int[maxSquareNum + 1];
+        for(int i = 1; i <= maxSquareNum; i++){
+            list[i - 1] = i * i;
+        }
+        int [] dp = new int[n + 1];
+         //basecase 
+         Arrays.fill(dp, n + 1);//全由1组成且+1，不能的个数
+         dp[0] = 0;//背包为0
+         for(int i = 1; i <= n; i++){
+             //在每个背包容量下，选择最小的一个选择列表i
+             for(int j = 0; j < list.length; j++){
+                 if(i - list[j] >= 0){
+                     dp[i] = Math.min(dp[i],dp[i - list[j]] + 1);//i选还是不选
+                 }else{
+                     //不选
+                     dp[i] = dp[i];
+                     break;//后面的选择列表直接不看了，肯定相减<0
+                 }
+             }
+         }
+         return dp[n];
+    }
+```
+
 
 
 # 四、贪心类型

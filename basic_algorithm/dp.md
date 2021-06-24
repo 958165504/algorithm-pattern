@@ -631,6 +631,88 @@ public int coinChange(int[] coins, int amount) {
         return false;
      }
 ```
+
+```java
+/*题目：给定一个非负整数数组，你最初位于数组的第一个位置。
+数组中的每个元素代表你在该位置可以跳跃的最大长度。
+你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+假设你总是可以到达数组的最后一个位置。
+*/
+/*每次在射程范围内选取下一个更有潜力的炮兵*/
+ //二刷：20210624 贪心算法
+     public int jump(int[] nums) {
+         if(nums.length == 1)
+            return 0;
+        int farest = nums[0];//维护一个最远距离
+        int index = 0;//当前位置
+        int step = 1;//步数
+        while(farest < nums.length - 1){
+            //选择下一个跳跃点
+            int oldFarest = farest;
+            for(int i = index; i < nums.length && i <= oldFarest; i++){
+                if(i + nums[i] > farest){
+                    farest = i + nums[i];
+                    index = i;//下一个跳到该点
+                }
+            }
+            step++;
+        }
+        return step;
+     }
+     
+     或者
+int jump(vector<int>& nums) {
+    int n = nums.size();
+    int end = 0, farthest = 0;
+    int jumps = 0;
+    for (int i = 0; i < n - 1; i++) {
+        farthest = max(nums[i] + i, farthest);
+        if (end == i) {//已完成本次区间去找最有潜力的炮兵，开始进入下一区间，寻找更有潜力炮兵
+            jumps++;
+            end = farthest;
+        }
+    }
+    return jumps;
+}
+
+
+本题贪心算法与动态规划区别
+动归：动归是递归区间的所以子节点并找出步数最小值，而贪心，不用每个子节点都递归，而是找其中最具有潜力的节点即可。
+【动态是穷举，而贪心是莽夫每次拿最好的出来，求局部最优根本不考虑之后是否还有更好的解，是否是全局最优】
+vector<int> memo;
+// 主函数
+int jump(vector<int>& nums) {
+    int n = nums.size();
+    // 备忘录都初始化为 n，相当于 INT_MAX
+    // 因为从 0 调到 n - 1 最多 n - 1 步
+    memo = vector<int>(n, n);
+    return dp(nums, 0);
+}
+
+int dp(vector<int>& nums, int p) {
+    int n = nums.size();
+    // base case
+    if (p >= n - 1) {
+        return 0;
+    }
+    // 子问题已经计算过
+    if (memo[p] != n) {
+        return memo[p];
+    }
+    int steps = nums[p];
+    // 你可以选择跳 1 步，2 步...
+    for (int i = 1; i <= steps; i++) {
+        // 穷举每一个选择
+        // 计算每一个子问题的结果
+        int subProblem = dp(nums, p + i);
+        // 取其中最小的作为最终结果
+        memo[p] = min(memo[p], subProblem + 1);
+    }
+    return memo[p];
+}
+```
+
+
 # 五、其他经典类型
 ### > 10) 打家劫舍
 [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  

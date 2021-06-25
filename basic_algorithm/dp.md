@@ -900,6 +900,32 @@ dp[i][1] = max(-price[i],dp[i - 1][1])同理
         return dp[prices.length - 1][0];
     }
 ```
+[123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)  
+```java
+ public int maxProfit(int[] prices) {
+/*题目：给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+ */
+
+        int[][][] dp = new int[prices.length][3][2];//[天][交易次数][持是否有] 规定买入时交易+1
+        //basecase 交易0次没有意义，就不初始化了
+        dp[0][1][1] = -prices[0];
+        dp[0][1][0] = 0;//同一天买入卖出
+        dp[0][2][1] = Integer.MIN_VALUE; //-prices[0];;//
+        dp[0][2][0] = 0;//同一天买入卖出两次
+        
+        for(int i = 1; i < prices.length; i++){
+            //顺序 必须是先持有再卖出 先1后0,
+            dp[i][1][1] = Math.max(dp[i - 1][1][1],dp[i - 1][0][0] - prices[i]);
+            dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][1][1] + prices[i]);
+            dp[i][2][1] = Math.max(dp[i - 1][2][1], dp[i - 1][1][0] - prices[i]);
+            dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][2][1] + prices[i]);
+        }
+        return Math.max(dp[prices.length - 1][2][0],dp[prices.length - 1][1][0]);
+    }
+
+```
 
 [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)  
 ```java

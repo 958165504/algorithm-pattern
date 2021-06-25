@@ -813,6 +813,39 @@ int dp(vector<int>& nums, int p) {
         }
     */
 ```
+
+[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)  
+```java
+/*题目：
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+*/
+
+/*思路： 二刷：20210625 动态规划
+状态：动态规划就是先找出所有状态，在确定dp定义
+选择：穷举所有状态，来根据选择来计算不同的状态，直至穷举完
+
+本题状态：第i天，当前是否持股和昨天是否持股有关系，为此我们需要把 是否持股 设计到状态数组中。
+定义dp[i][0] 今天不持股的最大收益
+选择：dp[i][0] = max(dp[i - 1][1] + price[i],dp[i - 1][0])//今天不持股和昨天持股或不持股的关系，选取收益最大值
+dp[i][1] = max(-price[i],dp[i - 1][1])同理
+*/
+
+    public int maxProfit(int[] prices) {
+        int[][] dp = new int[prices.length][2];//dp[i][0];第i天不持有的收益，dp[i][1]第i天持有的收益
+        //basecase
+        dp[0][0] = 0;//第1天不买入，收益为0
+        dp[0][1] = -prices[0];//第一天买入，收益为prices[0]
+        for(int i = 1; i < prices.length; i++){
+            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1] +  + prices[i]);
+            dp[i][1] = Math.max(/*dp[i - 1][0]*/ - prices[i],dp[i - 1][1]);//注：这儿交易只能一次，因此昨天不持股，今天持股，收益为-prices[i]，而dp[i - 1][0] - prices[i]表示可以多次交易情况
+        }
+        return dp[prices.length - 1][0];
+    }
+```
+
+
 [122. 买卖股票的最佳时机 II（动态规划+备忘录）](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)  
 ```java
 //动态规划+备忘录：是在买卖股票的最佳时机I的基础上【只能一次交易】，不断的穷举卖出，在递归下一轮分片[sell+1,end]
@@ -853,6 +886,21 @@ int dp(vector<int>& nums, int p) {
         return memo[start] = maxProfit;
     }
 ```
+```java
+    //二刷：20210625 动态规划
+    public int maxProfit(int[] prices) {
+        int[][] dp = new int[prices.length][2];
+        //basecase
+        dp[0][0] = 0;
+        dp[0][1] = -prices[0];
+        for(int i = 1; i < prices.length; i++){
+            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1] + prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][0] - prices[i],dp[i - 1][1]);
+        }
+        return dp[prices.length - 1][0];
+    }
+```
+
 [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)  
 ```java
     /*
@@ -941,37 +989,6 @@ int dp(vector<int>& nums, int p) {
     } 
 ```
 
-### 股票买卖动归解法
-[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)  
-```java
-/*题目：
-给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
-你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
-返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
-*/
-
-/*思路： 二刷：20210625 动态规划
-状态：动态规划就是先找出所有状态，在确定dp定义
-选择：穷举所有状态，来根据选择来计算不同的状态，直至穷举完
-
-本题状态：第i天，当前是否持股和昨天是否持股有关系，为此我们需要把 是否持股 设计到状态数组中。
-定义dp[i][0] 今天不持股的最大收益
-选择：dp[i][0] = max(dp[i - 1][1] + price[i],dp[i - 1][0])//今天不持股和昨天持股或不持股的关系，选取收益最大值
-dp[i][1] = max(-price[i],dp[i - 1][1])同理
-*/
-
-    public int maxProfit(int[] prices) {
-        int[][] dp = new int[prices.length][2];//dp[i][0];第i天不持有的收益，dp[i][1]第i天持有的收益
-        //basecase
-        dp[0][0] = 0;//第1天不买入，收益为0
-        dp[0][1] = -prices[0];//第一天买入，收益为prices[0]
-        for(int i = 1; i < prices.length; i++){
-            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1] +  + prices[i]);
-            dp[i][1] = Math.max(/*dp[i - 1][0]*/ - prices[i],dp[i - 1][1]);//注：这儿交易只能一次，因此昨天不持股，今天持股，收益为-prices[i]，而dp[i - 1][0] - prices[i]表示可以多次交易情况
-        }
-        return dp[prices.length - 1][0];
-    }
-```
 
 
 ## 背景

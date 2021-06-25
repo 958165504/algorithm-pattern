@@ -797,73 +797,6 @@ int dp(vector<int>& nums, int p) {
 
 ```
 
-### >11 乘积最大子数组（动态规划破解双重for）
-[152. 乘积最大子数组](https://leetcode-cn.com/problems/maximum-product-subarray/solution/152-cheng-ji-zui-da-zi-shu-zu-dong-tai-g-6nhn/)  
-//看的官方的解答
-    /*遇到暴力解需要两个for时，考虑用动态规划的话，只考虑一个端点再动，这样一次遍历完成O(n)
-    定义dp[i]：表示以i为结尾的子数组乘积max，dp[i] = max{dp[i-1]*ai,ai},
-    已知前面i-1为结尾子数组，到了i就考虑把i接到末尾，还是单独成一派
-
-    由于存在正负数，需要分正负两种情况比较最大值
-    如：a={5,6,−3,4,−3}，最大值序列{5,30,−3,4,−3}，但是最大值!=30,而是全部相乘
-    /
-     */
-```java
-	public int maxProduct(int[] nums) {
-            int length = nums.length;
-            int[] maxF = new int[length];
-            int[] minF = new int[length];
-            //赋初值，最坏的情况，最大值应该为自己一个数
-            System.arraycopy(nums, 0, maxF, 0, length);
-            System.arraycopy(nums, 0, minF, 0, length);
-            for (int i = 1; i < length; ++i) {
-                maxF[i] = Math.max(maxF[i - 1] * nums[i], Math.max(nums[i], minF[i - 1] * nums[i]));
-                minF[i] = Math.min(minF[i - 1] * nums[i], Math.min(nums[i], maxF[i - 1] * nums[i]));
-            }
-            int ans = maxF[0];
-            for (int i = 1; i < length; ++i) {
-                ans = Math.max(ans, maxF[i]);
-            }
-            return ans;
-        }
-```
-
-### 凑零钱类型问题
-[279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)  
-```java
- /*
-    这道题和纸币买卖题一样，有一个选择列表，求金额的最少纸币数
-    方法一：递归暴力解：先算出选择列表choseList，然后想买卖问题一样，每次遍历试下所有的纸币，在每一轮选择循环中，选取最少的纸币数，但会溢出  可加上备忘录消除重复解‘
-    方法二：动态规划从下往上：由于动归是从底往上，i之前算出了，因此原理和递归+备忘录一样
-    for(i:n)
-        for(k:选择列表))
-            dp[i] = min(dp[i], dp[i - k]+1)
-    */
-
-    public int numSquares(int n) {
-        //动态规划
-        //生成选择列表
-        int maxSquareNum = (int) (Math.sqrt(n)) + 1;//考虑到根号为小数情况
-        int[] choseList = new int[maxSquareNum + 1];
-        for (int i = 1; i <= maxSquareNum; i++) {
-            choseList[i] = i * i;
-        }
-        //动态规划进行选择
-        int[] dp = new int[n + 1];
-        Arrays.fill(dp,Integer.MAX_VALUE);
-        dp[0] = 0;//basecase
-        for (int i = 1; i <= n; i++) {
-            //选择列表
-            for (int j = 1; j < choseList.length; j++) {
-                if(i - choseList[j] < 0)
-                    break;
-                dp[i] = Math.min(dp[i - choseList[j]] + 1, dp[i]);
-            }
-        }
-        return dp[n];
-    }
-```
-
 ### 股票买卖问题[动态规划+备忘录很好理解]
 > 参考东哥的算法[股票问题的一种通用解法 ](https://mp.weixin.qq.com/s?__biz=MzAxODQxMDM0Mw==&mid=2247484509&idx=1&sn=21ace57f19d996d46e82bd7d806a2e3c&source=41#wechat_redirect)  
 >模板
@@ -1005,6 +938,38 @@ int dp(vector<int>& nums, int p) {
             curMaxProfit = Math.max(curMaxProfit, (prices[sell] - curMin) + dp(prices,sell + 1,k - 1));
         }
         return memo[start][k] = curMaxProfit;
+    } 
+```
+
+### 股票买卖动归解法
+[121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)  
+```java
+/*题目：
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+*/
+
+/*思路： 二刷：20210625 动态规划
+状态：动态规划就是先找出所有状态，在确定dp定义
+选择：穷举所有状态，来根据选择来计算不同的状态，直至穷举完
+
+本题状态：第i天，当前是否持股和昨天是否持股有关系，为此我们需要把 是否持股 设计到状态数组中。
+定义dp[i][0] 今天不持股的最大收益
+选择：dp[i][0] = max(dp[i - 1][1] + price[i],dp[i - 1][0])//今天不持股和昨天持股或不持股的关系，选取收益最大值
+dp[i][1] = max(-price[i],dp[i - 1][1])同理
+*/
+
+    public int maxProfit(int[] prices) {
+        int[][] dp = new int[prices.length][2];//dp[i][0];第i天不持有的收益，dp[i][1]第i天持有的收益
+        //basecase
+        dp[0][0] = 0;//第1天不买入，收益为0
+        dp[0][1] = -prices[0];//第一天买入，收益为prices[0]
+        for(int i = 1; i < prices.length; i++){
+            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1] +  + prices[i]);
+            dp[i][1] = Math.max(/*dp[i - 1][0]*/ - prices[i],dp[i - 1][1]);//注：这儿交易只能一次，因此昨天不持股，今天持股，收益为-prices[i]，而dp[i - 1][0] - prices[i]表示可以多次交易情况
+        }
+        return dp[prices.length - 1][0];
     }
 ```
 

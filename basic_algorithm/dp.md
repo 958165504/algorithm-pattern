@@ -991,8 +991,6 @@ dp[i][1] = max(-price[i],dp[i - 1][1])同理
 
 ### > 2) 打家劫舍
 [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
-
-
 ```java
 /*题目：
 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
@@ -1050,7 +1048,52 @@ dp[i][1] = max(-price[i],dp[i - 1][1])同理
 
     //     return memeory[index] = Math.max(money1,money2) ;//返回两种选择的最大值，每种选择都局部最优，推向全局最优
     // }
+    
 ```
+[198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
+```java
+/*题目：
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。
+给定一个代表每个房屋存放金额的非负整数数组，计算你 在不触动警报装置的情况下 ，今晚能够偷窃到的最高金额。
+*/
+
+ /*思路：
+    二刷：20210627【自己想的方法，强】
+    由于第一号房间抢与不抢会影响最后一号
+    因此手动分类 对第一号房间手动设置不抢和抢
+    最后根据两种情况求得的值，求最大值  
+     */
+    public int rob(int[] nums) {
+        if(nums.length <= 1)
+            return nums[0];
+        
+        int[][] dp = new int[nums.length][2];
+        int max1 = 0;
+        int max2 = 0;
+        //basecase1
+        dp[0][0] = 0;//手动规定第一号不抢
+        dp[1][0] = dp[0][0];//第二天不抢
+        dp[1][1] = dp[0][0] + nums[1];//第二天抢
+        for(int i = 2; i < nums.length; i++){
+            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1]);
+            dp[i][1] = dp[i - 1][0] + nums[i];
+        }
+        max1 = Math.max(dp[nums.length - 1][0],dp[nums.length - 1][1]);
+
+        //basecase2
+        dp[0][1] = nums[0];//手动规定第一号抢
+        dp[1][0] = dp[0][1];//第二天不抢
+        dp[1][1] = dp[1][0];//第二天不能抢,抢了等于不抢的值
+        for(int i = 2; i < nums.length; i++){
+            dp[i][0] = Math.max(dp[i - 1][0],dp[i - 1][1]);
+            dp[i][1] = dp[i - 1][0] + nums[i];
+        }
+        max2 = dp[nums.length - 1][0];//因为第一天必须抢，因此最后一天不能抢
+
+        return Math.max(max1,max2);
+    }
+```
+
 
 
 

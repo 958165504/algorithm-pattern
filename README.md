@@ -28,7 +28,12 @@
 - [栈和队列](./data_structure/stack_queue.md)
 - [二进制](./data_structure/binary_op.md)
 - [图]
- > 拓扑排序：[207. 课程表(图的拓扑排序)](https://leetcode-cn.com/problems/course-schedule/solution/207-ke-cheng-biao-tu-de-tuo-bu-pai-xu-by-zgu9/)  
+- > 1）邻接表与邻接矩阵  
+邻接表很直观，我把每个节点x的邻居都存到一个列表里，然后把x和这个列表关联起来，这样就可以通过一个节点x找到它的所有相邻节点。   
+邻接矩阵则是一个二维布尔数组，我们权且成为matrix，如果节点x和y是相连的，那么就把matrix[x][y]设为true。如果想找节点x的邻居，去扫一圈matrix[x][..]就行了。  
+![图片](https://user-images.githubusercontent.com/73264826/123726952-6c2c5880-d8c3-11eb-8145-ff4cbbc8f77e.png)
+
+ > 2）拓扑排序：[207. 课程表(图的拓扑排序)](https://leetcode-cn.com/problems/course-schedule/solution/207-ke-cheng-biao-tu-de-tuo-bu-pai-xu-by-zgu9/)  
  判断一个有向图是否无环
  ```java
   public boolean canFinish(int numCourses, int[][] prerequisites) {
@@ -76,7 +81,7 @@
         return numCourses == 0;
     }
  ```
- > 图的遍历：[797. 所有可能的路径](https://leetcode-cn.com/problems/course-schedule/solution/207-ke-cheng-biao-tu-de-tuo-bu-pai-xu-by-zgu9/)  
+ > 3）图的遍历：[797. 所有可能的路径](https://leetcode-cn.com/problems/course-schedule/solution/207-ke-cheng-biao-tu-de-tuo-bu-pai-xu-by-zgu9/)  
  ```java
  /*题目：
  给一个有 n 个结点的有向无环图，找到所有从 0 到 n-1 的路径并输出（不要求按顺序）
@@ -115,10 +120,6 @@
         }
     }
  ```
->邻接表与邻接矩阵  
-邻接表很直观，我把每个节点x的邻居都存到一个列表里，然后把x和这个列表关联起来，这样就可以通过一个节点x找到它的所有相邻节点。   
-邻接矩阵则是一个二维布尔数组，我们权且成为matrix，如果节点x和y是相连的，那么就把matrix[x][y]设为true。如果想找节点x的邻居，去扫一圈matrix[x][..]就行了。  
-![图片](https://user-images.githubusercontent.com/73264826/123726952-6c2c5880-d8c3-11eb-8145-ff4cbbc8f77e.png)
 
 
 

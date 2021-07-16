@@ -194,7 +194,56 @@ void sort(int[] nums, int lo, int hi) {
         return queue.peek();
     }
 ```
+>自己用递归构造的小顶堆，模板的迭代构造不好手写，记不住
+[JZ29 最小的K个数 ](https://www.nowcoder.com/practice/6a296eb82cf844ca8539b57c23e6e9bf?tpId=13&&tqId=11182&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)  
+```java
+    //自己构造小顶堆,有一点注意：这个堆一定会有右子节点吗，靠右子来判断是否越界，是不是有问题呢
+    /*递归实现的小顶堆，大顶堆父子判断，反过来就行*/
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+         //先构建小顶堆，先从末尾的非叶子节点开始往上调整
+        for(int i = input.length / 2 - 1; i >= 0; i--){
+            adjust(input, i,input.length - 1);
+        }
+        //依次取出小顶堆的前k个最小值
+        ArrayList<Integer> res = new ArrayList();
+        for(int i = 0; i < k; i++){
+            //交换堆顶和堆尾元素
+            int head = input[0];
+            int tail = input[input.length - 1 - i];
+            input[0] = tail;
+            res.add(head);
+            //重新调整堆
+            adjust(input, 0,input.length - 1 - i - 1);
+        }
+        return res;
+    }
 
+    public void adjust(int [] input, int i,int j){//调整i~j区间为小顶堆
+        if(2 * i + 2 > j)//从0开始的下标 左 = 2 * i + 1
+            return;
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+        int min = 0;
+        int minIndex = 0;
+        //选出左右节点最大值
+        if(input[l] <= input[r]){
+            min = input[l];
+            minIndex = l;
+        }else{
+            min = input[r];
+            minIndex = r;
+        }
+        if(input[i] < min)//不用调整
+            return;
+        else{//需要调整
+            //交换父子节点
+            int temp = input[i];
+            input[minIndex] = temp;
+            input[i] = min;
+            adjust(input, minIndex,j);
+        }
+    }	
+```
 
 
 

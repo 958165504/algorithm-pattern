@@ -197,7 +197,7 @@ void sort(int[] nums, int lo, int hi) {
 >自己用递归构造的小顶堆，模板的迭代构造不好手写，记不住
 [JZ29 最小的K个数 ](https://www.nowcoder.com/practice/6a296eb82cf844ca8539b57c23e6e9bf?tpId=13&&tqId=11182&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)  
 ```java
-    //自己构造小顶堆,有一点注意：这个堆一定会有右子节点吗，靠右子来判断是否越界，是不是有问题呢
+    //自己构造小顶堆,有一点注意：这个堆一定会有右子节点吗，靠右子来判断是否越界，是不是有问题呢，已经防止了右没有的情况
     /*递归实现的小顶堆，大顶堆父子判断，反过来就行*/
     public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
          //先构建小顶堆，先从末尾的非叶子节点开始往上调整
@@ -219,19 +219,20 @@ void sort(int[] nums, int lo, int hi) {
     }
 
     public void adjust(int [] input, int i,int j){//调整i~j区间为小顶堆
-        if(2 * i + 2 > j)//从0开始的下标 左 = 2 * i + 1
+        if(2 * i + 1 > j  && 2 * i + 2 > j)//从0开始的下标 左 = 2 * i + 1,有可能没有右子，注意是&&的关系
             return;
         int l = 2 * i + 1;
         int r = 2 * i + 2;
         int min = 0;
         int minIndex = 0;
         //选出左右节点最大值
-        if(input[l] <= input[r]){
-            min = input[l];
-            minIndex = l;
-        }else{
+	
+        if(2 * i + 2 <= j && input[r] <= input[l]){
             min = input[r];
             minIndex = r;
+        }else{//当没有右子或右比左大时，则最小值为左
+            min = input[l];
+            minIndex = l;
         }
         if(input[i] < min)//不用调整
             return;
